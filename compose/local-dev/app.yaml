@@ -15,8 +15,8 @@ services:
     restart: unless-stopped
 
 networks:
-  aggie_experts_prod:
-    external: true
+  default:
+    name: aggie_experts_prod
 
 volumes:
   es-data:
