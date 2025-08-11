@@ -4,7 +4,7 @@ ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $ROOT_DIR/..
 
 gcloud --project aggie-experts secrets versions access latest --secret=local-dev-service-account > service-account.json
-pwd
+
 # Check if SUPERSET_SECRET_KEY exists in .env file
 ENV_FILE="compose/local-dev/.env"
 if [ ! -f "$ENV_FILE" ]; then
