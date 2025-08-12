@@ -21,5 +21,5 @@ Run the application:
 
 Init the databases (first start only)
 ```bash
-docker compose exec -p aggie-experts-harvest harvest experts init
+docker compose -p aggie-experts-harvest exec harvest experts init
 ```

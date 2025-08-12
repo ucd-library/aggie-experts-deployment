@@ -16,6 +16,8 @@ services:
       - ../../../aggie-experts/harvest/vocabularies:/opt/harvest/vocabularies
       - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
       - ../../../aggie-experts/service-account.json:/service-account.json
+    depends_on:
+      - postgres
     ports:
       - "3000:3000"
     command: ["dagster", "dev",  "-h", "0.0.0.0", "-p", "3000", "-f", "/opt/harvest/defs.py"]
@@ -32,10 +34,17 @@ services:
 
   superset:
     image: ${IMAGE_PROJECT_ANDUIN_SUPERSET}
+    env_file:
+      - .env
     environment:
       - SUPERSET_SECRET_KEY=${SUPERSET_SECRET_KEY}
       - DASHBOARD_FILE=gs://anduin-dashboards/dashboard_ex1.zip
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
+      - USE_KEYCLOAK=true
+      - KEYCLOAK_REALM_NAME=aggie-experts
+      - KEYCLOAK_CLIENT_ID=anduin
+      - KEYCLOAK_URL=http://keycloak:8080/auth
+      - KEYCLOAK_ROLE_DOT_PATH=resource_access.anduin.roles
     ports:
       - "8088:8088"
     depends_on:
