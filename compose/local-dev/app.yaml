@@ -14,6 +14,20 @@ services:
       - es-data:/usr/share/elasticsearch/data
     restart: unless-stopped
 
+  kibana:
+      image: docker.elastic.co/kibana/kibana:8.4.3
+      ports:
+       - 5601:5601
+      environment:
+        - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+        - ELASTICSEARCH_URL=http://elasticsearch:9200
+        # - SERVER_BASEPATH=/kibana
+        # - SERVER_REWRITEBASEPATH=true
+        - xpack.security.enabled=false
+        - telemetry.enabled=false
+      depends_on:
+        - elasticsearch
+
 networks:
   default:
     name: aggie_experts_prod
