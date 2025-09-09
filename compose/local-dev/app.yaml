@@ -24,7 +24,8 @@ services:
   gateway:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
     volumes:
-      - ../../../aggie-experts/webapp:/app
+      - ../../../aggie-experts/webapp/lib:/app/lib
+      - ../../../aggie-experts/webapp/models:/app/models
     ports:
       - "8080:3000"
     depends_on:
@@ -36,7 +37,12 @@ services:
   spa:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
     volumes:
-      - ../../../aggie-experts/webapp:/app
+      - ../../../aggie-experts/webapp/lib:/app/lib
+      - ../../../aggie-experts/webapp/models:/app/models
+      - ../../../aggie-experts/webapp/spa/controllers:/app/spa/controllers
+      - ../../../aggie-experts/webapp/spa/models:/app/spa/models
+      - ../../../aggie-experts/webapp/spa/config.js:/app/spa/config.js
+      - ../../../aggie-experts/webapp/spa/public:/app/spa/public
     environment:
       - CLIENT_ENV=${CLIENT_ENV:-production}
       - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
@@ -49,7 +55,8 @@ services:
   api:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
     volumes:
-      - ../../../aggie-experts/webapp:/app
+      - ../../../aggie-experts/webapp/lib:/app/lib
+      - ../../../aggie-experts/webapp/models:/app/models
     depends_on:
       elasticsearch:
         condition: service_healthy
