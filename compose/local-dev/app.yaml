@@ -42,7 +42,7 @@ services:
       - ../../../aggie-experts/webapp/spa/controllers:/app/spa/controllers
       - ../../../aggie-experts/webapp/spa/models:/app/spa/models
       - ../../../aggie-experts/webapp/spa/config.js:/app/spa/config.js
-      - ../../../aggie-experts/webapp/spa/public:/app/spa/public
+      - ../../../aggie-experts/webapp/spa/client/public:/app/spa/client/public
     environment:
       - CLIENT_ENV=${CLIENT_ENV:-production}
       - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
