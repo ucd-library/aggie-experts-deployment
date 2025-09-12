@@ -45,6 +45,7 @@ services:
       - KEYCLOAK_CLIENT_ID=anduin
       - KEYCLOAK_URL=http://keycloak:8080/auth
       - KEYCLOAK_ROLE_DOT_PATH=resource_access.anduin.roles
+      - TALISMAN_ENABLED=false
     ports:
       - "8088:8088"
     depends_on:
