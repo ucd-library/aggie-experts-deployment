@@ -43,7 +43,7 @@ services:
       - .env
     environment:
       - SUPERSET_SECRET_KEY=${SUPERSET_SECRET_KEY}
-      - DASHBOARD_FILE=gs://anduin-dashboards/dashboard_ex1.zip
+      - DASHBOARD_FILE=gs://anduin-dashboards/dashboard_year_week_update.zip
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
       - USE_KEYCLOAK=true
       - KEYCLOAK_REALM_NAME=aggie-experts
