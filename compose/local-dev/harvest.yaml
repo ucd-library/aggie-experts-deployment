@@ -6,16 +6,21 @@ services:
     environment:
       - EXPERTS_CACHE_ROOT_DIR=/opt/cache
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
+      - CASKFS_PG_HOST=postgres
       - DAGSTER_POSTGRES_USER=postgres
       - DAGSTER_POSTGRES_PASSWORD=postgres
       - DAGSTER_POSTGRES_DB=dagster
       - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
     volumes:
+      # caskfs code
+      - ../../../caskfs/src:/opt/caskfs/src
+      # harvest code
       - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
       - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
       - ../../../aggie-experts/harvest/vocabularies:/opt/harvest/vocabularies
       - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
       - ../../../aggie-experts/service-account.json:/service-account.json
+      - data_cache:/opt/cache
     depends_on:
       - postgres
     ports:

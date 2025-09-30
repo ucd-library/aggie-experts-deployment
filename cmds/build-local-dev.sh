@@ -25,6 +25,12 @@ cork-kube build exec \
   --set-env $ENV_FILE
 
 cork-kube build exec \
+  -p caskfs \
+  -v main \
+  -o sandbox \
+  --depth ALL
+
+cork-kube build exec \
   -p aggie-experts \
   -v $VERSION \
   --set-env $ENV_FILE \
