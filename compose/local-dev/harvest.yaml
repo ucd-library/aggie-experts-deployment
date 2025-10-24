@@ -10,6 +10,8 @@ services:
       - CASKFS_ENABLE_POWERWASH=true
       - CASKFS_ROOT_DIR=/opt/cache
       - CASKFS_ACL_ENABLED=false
+      - CASKFS_WEBAPP_PORT=3001
+      - CASKFS_WEBAPP_ENV=dev
       - DAGSTER_POSTGRES_USER=postgres
       - DAGSTER_POSTGRES_PASSWORD=postgres
       - DAGSTER_POSTGRES_DB=dagster
@@ -28,6 +30,7 @@ services:
       - postgres
     ports:
       - "3000:3000"
+      - "3001:3001"
     command: ["dagster", "dev",  "-h", "0.0.0.0", "-p", "3000", "-f", "/opt/harvest/defs.py"]
 
   postgres:
