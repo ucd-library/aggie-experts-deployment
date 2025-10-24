@@ -7,6 +7,9 @@ services:
       - EXPERTS_CACHE_ROOT_DIR=/opt/cache
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
       - CASKFS_PG_HOST=postgres
+      - CASKFS_ENABLE_POWERWASH=true
+      - CASKFS_ROOT_DIR=/opt/cache
+      - CASKFS_ACL_ENABLED=false
       - DAGSTER_POSTGRES_USER=postgres
       - DAGSTER_POSTGRES_PASSWORD=postgres
       - DAGSTER_POSTGRES_DB=dagster
