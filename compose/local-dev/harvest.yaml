@@ -4,12 +4,15 @@ services:
     image: ${IMAGE_PROJECT_ANDUIN_AUTH_GATEWAY}
     env_file: 
       - .env
+    depends_on:
+      - postgres
     environment:
       - PORT=4000
       - APP_NAME=Aggie Experts - Harvest
       - POSTGRES_PASSWORD=postgres
       - CASK_URL=http://caskfs-ui:3000
       - DAGSTER_URL=http://dagster-ui:3000
+      - DEFAULT_DASHBOARD_LINK=/superset/superset/dashboard/1
       - PROXY_ADDITIONAL_SERVICE_LINKS={"name":"webapp","title":"Webapp","subtitle":"Aggie Experts","link":"http://localhost:3000","color":"brand-secondary-70","icon":"fas fa-browser"}
     volumes:
       - ../../../../project-anduin/auth-gateway/controllers:/app/controllers
@@ -103,7 +106,7 @@ services:
     env_file:
       - .env
     environment:
-      - DASHBOARD_FILE=gs://anduin-dashboards/dashboard_year_week_update.zip
+      - DASHBOARD_FILE=gs://anduin-dashboards/dashboard_prod.zip
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
       - SUPERSET_APP_ROOT=/superset
     depends_on:
@@ -112,6 +115,8 @@ services:
       - superset_home:/app/superset_home
       - superset_init:/etc/superset/init
       - ../../../aggie-experts/service-account.json:/service-account.json
+      - ../../../../project-anduin/superset/superset_config.py:/app/superset_config.py
+      - ../../../../project-anduin/superset/custom_security_manager.py:/app/custom_security_manager.py
     # command: ["bash", "-c", "/app/docker/superset-start.sh"]
     # command: ["bash", "-c", "tail -f /dev/null"]
 
