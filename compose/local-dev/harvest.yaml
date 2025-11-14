@@ -1,5 +1,41 @@
 services:
-  harvest:
+
+  auth-gateway:
+    image: ${IMAGE_PROJECT_ANDUIN_AUTH_GATEWAY}
+    env_file: 
+      - .env
+    environment:
+      - PORT=4000
+      - APP_NAME=Aggie Experts - Harvest
+      - POSTGRES_PASSWORD=postgres
+      - CASK_URL=http://caskfs-ui:3000
+      - DAGSTER_URL=http://dagster-ui:3000
+      - PROXY_ADDITIONAL_SERVICE_LINKS={"name":"webapp","title":"Webapp","subtitle":"Aggie Experts","link":"http://localhost:3000","color":"brand-secondary-70","icon":"fas fa-browser"}
+    volumes:
+      - ../../../../project-anduin/auth-gateway/controllers:/app/controllers
+      - ../../../../project-anduin/auth-gateway/lib:/app/lib
+      - ../../../../project-anduin/auth-gateway/client:/app/client
+      - ../../../../project-anduin/auth-gateway/index.js:/app/index.js
+    ports:
+      - "4000:4000"
+
+  dagster-ui:
+    image: ${IMAGE_AGGIE_EXPERTS_HARVEST}
+    env_file:
+      - .env
+    environment:
+      - DAGSTER_POSTGRES_USER=postgres
+      - DAGSTER_POSTGRES_PASSWORD=postgres
+      - DAGSTER_POSTGRES_DB=dagster
+      - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
+    volumes:
+      - dagster_storage:/opt/dagster/dagster_home/storage
+      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
+    depends_on:
+      - postgres
+    command: ["dagster-webserver", "--path-prefix", "/dagster", "-h", "0.0.0.0", "-p", "3000", "-f", "/opt/harvest/defs.py"]
+
+  dagster-daemon:
     image: ${IMAGE_AGGIE_EXPERTS_HARVEST}
     env_file:
       - .env
@@ -17,9 +53,11 @@ services:
       - DAGSTER_POSTGRES_DB=dagster
       - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
     volumes:
+      # dagster
+      - dagster_storage:/opt/dagster/dagster_home/storage
       # caskfs code
       - ../../../caskfs/src:/opt/caskfs/src
-      # harvest code
+      # ae harvest code
       - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
       - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
       - ../../../aggie-experts/harvest/vocabularies:/opt/harvest/vocabularies
@@ -28,9 +66,7 @@ services:
       - data_cache:/opt/cache
     depends_on:
       - postgres
-    ports:
-      - "3000:3000"
-    command: ["dagster", "dev",  "-h", "0.0.0.0", "-p", "3000", "-f", "/opt/harvest/defs.py"]
+    command: ["dagster-daemon", "run", "-f", "/opt/harvest/defs.py"]
 
   caskfs-ui:
     image: ${IMAGE_AGGIE_EXPERTS_HARVEST}
@@ -42,16 +78,14 @@ services:
       - CASKFS_ENABLE_POWERWASH=true
       - CASKFS_ROOT_DIR=/opt/cache
       - CASKFS_ACL_ENABLED=false
-      - CASKFS_WEBAPP_PORT=3001
       - CASKFS_WEBAPP_ENV=dev
+      - CASKFS_WEBAPP_PATH_PREFIX=/cask
     volumes:
       # caskfs code
       - ../../../caskfs/src:/opt/caskfs/src
       - data_cache:/opt/cache
     depends_on:
       - postgres
-    ports:
-      - "3001:3001"
     command: ["cask", "serve"]
 
   postgres:
@@ -69,17 +103,9 @@ services:
     env_file:
       - .env
     environment:
-      - SUPERSET_SECRET_KEY=${SUPERSET_SECRET_KEY}
       - DASHBOARD_FILE=gs://anduin-dashboards/dashboard_year_week_update.zip
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
-      - USE_KEYCLOAK=true
-      - KEYCLOAK_REALM_NAME=aggie-experts
-      - KEYCLOAK_CLIENT_ID=anduin
-      - KEYCLOAK_URL=http://keycloak:8080/auth
-      - KEYCLOAK_ROLE_DOT_PATH=resource_access.anduin.roles
-      - TALISMAN_ENABLED=false
-    ports:
-      - "8088:8088"
+      - SUPERSET_APP_ROOT=/superset
     depends_on:
       - postgres
     volumes:
@@ -87,6 +113,7 @@ services:
       - superset_init:/etc/superset/init
       - ../../../aggie-experts/service-account.json:/service-account.json
     # command: ["bash", "-c", "/app/docker/superset-start.sh"]
+    # command: ["bash", "-c", "tail -f /dev/null"]
 
 networks:
   default:
@@ -95,7 +122,7 @@ networks:
 volumes:
   data_cache:
     driver: local
-  dagster_home:
+  dagster_storage:
     driver: local
   pg_data:
     driver: local
