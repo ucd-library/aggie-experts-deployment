@@ -54,7 +54,7 @@ services:
       # dagster
       - dagster_storage:/opt/dagster/dagster_home/storage
       # caskfs code
-      - ../../../caskfs/src:/opt/caskfs/src
+      - ../../../../caskfs/src:/opt/caskfs/src
       # ae harvest code
       - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
       - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
@@ -82,7 +82,7 @@ services:
       # dagster
       - dagster_storage:/opt/dagster/dagster_home/storage
       # caskfs code
-      - ../../../caskfs/src:/opt/caskfs/src
+      - ../../../../caskfs/src:/opt/caskfs/src
       # ae harvest code
       - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
       - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
@@ -108,7 +108,7 @@ services:
       - CASKFS_WEBAPP_PATH_PREFIX=/cask
     volumes:
       # caskfs code
-      - ../../../caskfs/src:/opt/caskfs/src
+      - ../../../../caskfs/src:/opt/caskfs/src
       - data_cache:/opt/cache
     depends_on:
       - postgres
