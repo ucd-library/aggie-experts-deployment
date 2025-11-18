@@ -1,7 +1,7 @@
 services:
 
   auth-gateway:
-    image: ${IMAGE_PROJECT_ANDUIN_AUTH_GATEWAY}
+    image: ${IMAGE_AGGIE_EXPERTS_ANDUIN_GATEWAY}
     env_file: 
       - .env
     depends_on:
@@ -36,7 +36,8 @@ services:
       - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
     depends_on:
       - postgres
-    command: ["dagster-webserver", "--path-prefix", "/dagster", "-h", "0.0.0.0", "-p", "3000", "-f", "/opt/harvest/defs.py"]
+      - dagster-code-server
+    command: ["dagster-webserver", "--path-prefix", "/dagster", "-h", "0.0.0.0", "-p", "3000", "-w", "/opt/dagster/dagster_home/workspace.yaml"]
 
   dagster-daemon:
     image: ${IMAGE_AGGIE_EXPERTS_HARVEST}
@@ -45,12 +46,6 @@ services:
     environment:
       - EXPERTS_CACHE_ROOT_DIR=/opt/cache
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
-      - CASKFS_PG_HOST=postgres
-      - CASKFS_ENABLE_POWERWASH=true
-      - CASKFS_ROOT_DIR=/opt/cache
-      - CASKFS_ACL_ENABLED=false
-      - CASKFS_WEBAPP_PORT=3001
-      - CASKFS_WEBAPP_ENV=dev
       - DAGSTER_POSTGRES_USER=postgres
       - DAGSTER_POSTGRES_PASSWORD=postgres
       - DAGSTER_POSTGRES_DB=dagster
@@ -69,7 +64,35 @@ services:
       - data_cache:/opt/cache
     depends_on:
       - postgres
-    command: ["dagster-daemon", "run", "-f", "/opt/harvest/defs.py"]
+      - dagster-code-server
+    command: ["dagster-daemon", "run", "-w", "/opt/dagster/dagster_home/workspace.yaml"]
+
+  dagster-code-server:
+    image: ${IMAGE_AGGIE_EXPERTS_HARVEST}
+    env_file:
+      - .env
+    environment:
+      - EXPERTS_CACHE_ROOT_DIR=/opt/cache
+      - DAGSTER_POSTGRES_USER=postgres
+      - DAGSTER_POSTGRES_PASSWORD=postgres
+      - DAGSTER_POSTGRES_DB=dagster
+      - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
+      - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
+    volumes:
+      # dagster
+      - dagster_storage:/opt/dagster/dagster_home/storage
+      # caskfs code
+      - ../../../caskfs/src:/opt/caskfs/src
+      # ae harvest code
+      - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
+      - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
+      - ../../../aggie-experts/harvest/vocabularies:/opt/harvest/vocabularies
+      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
+      - ../../../aggie-experts/service-account.json:/service-account.json
+      - data_cache:/opt/cache
+    depends_on:
+      - postgres
+    command: ["dagster", "code-server", "start", "-h", "0.0.0.0", "-p", "4000", "-f", "/opt/harvest/defs.py"]
 
   caskfs-ui:
     image: ${IMAGE_AGGIE_EXPERTS_HARVEST}
