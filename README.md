@@ -21,3 +21,4 @@ Run the application:
 
 Init the databases (first start only)
 
+git

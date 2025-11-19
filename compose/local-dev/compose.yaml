@@ -2,6 +2,7 @@ services:
 
   auth-gateway:
     image: ${IMAGE_AGGIE_EXPERTS_ANDUIN_GATEWAY}
+    restart: always
     env_file: 
       - .env
     depends_on:
@@ -119,8 +120,11 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    # ports:
-    #   - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - pg_data:/var/lib/postgresql/data
 
@@ -143,6 +147,90 @@ services:
     # command: ["bash", "-c", "/app/docker/superset-start.sh"]
     # command: ["bash", "-c", "tail -f /dev/null"]
 
+  elasticsearch:
+    image: ${IMAGE_FIN_FIN_ELASTIC_SEARCH}
+    environment:
+      - node.name=elasticsearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
+    ports:
+       - 9200:9200
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test: ['CMD-SHELL', 'if curl -s -o /dev/null -w "%{http_code}" http://localhost:9200/_ingest/pipeline/aggie-experts-pipeline | grep -q "200"; then exit 0; else curl -X PUT -H "Content-Type: application/json" -d ''{"description":"Adds a modified-date field","processors":[{"set":{"field":"modified-date","value":"{{_ingest.timestamp}}"}}]}'' http://localhost:9200/_ingest/pipeline/aggie-experts-pipeline || exit 1; fi']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    restart: unless-stopped
+
+  gateway:
+    image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
+    volumes:
+      - ../../../aggie-experts/webapp/lib:/app/lib
+      - ../../../aggie-experts/webapp/models:/app/models
+    ports:
+      - "8080:3000"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: unless-stopped
+    command: npm run gateway
+    # command: bash -c 'tail -f /dev/null'
+
+  spa:
+    image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
+    volumes:
+      - ../../../aggie-experts/webapp/lib:/app/lib
+      - ../../../aggie-experts/webapp/models:/app/models
+      - ../../../aggie-experts/webapp/spa/controllers:/app/spa/controllers
+      - ../../../aggie-experts/webapp/spa/models:/app/spa/models
+      - ../../../aggie-experts/webapp/spa/config.js:/app/spa/config.js
+      - ../../../aggie-experts/webapp/spa/client:/app/spa/client
+    environment:
+      - CLIENT_ENV=${CLIENT_ENV:-production}
+      - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: unless-stopped
+    command: npm run spa
+    # command: bash -c 'tail -f /dev/null'
+
+  api:
+    image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
+    env_file:
+      - .env
+    volumes:
+      - ../../../aggie-experts/webapp/lib:/app/lib
+      - ../../../aggie-experts/webapp/models:/app/models
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: unless-stopped
+    command: npm run api
+    # command: bash -c 'tail -f /dev/null'
+
+  kibana:
+      image: docker.elastic.co/kibana/kibana:8.4.3
+      ports:
+       - 5601:5601
+      environment:
+        - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+        - ELASTICSEARCH_URL=http://elasticsearch:9200
+        - SERVER_BASEPATH=/kibana
+        - SERVER_REWRITEBASEPATH=true
+        - SERVER_PUBLICBASEURL=http://localhost:4000/kibana
+        - xpack.security.enabled=false
+        - telemetry.enabled=false
+      depends_on:
+        - elasticsearch
+
 networks:
   default:
     name: aggie_experts_prod
@@ -157,4 +245,6 @@ volumes:
   superset_home:
     driver: local
   superset_init:
+    driver: local
+  es-data:
     driver: local

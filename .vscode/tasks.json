@@ -1,0 +1,134 @@
+{
+  "version": "2.0.0",
+  "inputs": [
+    {
+      "id": "serviceName",
+      "type": "promptString",
+      "description": "Enter the service name",
+      "default": "dagster-code-server"
+    }
+  ],
+  "tasks": [
+    {
+      "label": "Build Local Dev Cluster",
+      "type": "shell",
+      "command": "./cmds/build-local-dev.sh",
+      "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated",
+          "showReuseMessage": false,
+          "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Local Dev Cluster",
+      "type": "shell",
+      "command": "./cmds/up.sh local-dev",
+      "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated",
+          "showReuseMessage": false,
+          "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Stop Local Dev Cluster",
+      "type": "shell",
+      "command": "./cmds/down.sh",
+      "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated",
+          "showReuseMessage": false,
+          "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "View Logs",
+      "type": "shell",
+      "command": "docker-compose -p aggie-experts logs -f ${input:serviceName}",
+      "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "new",
+          "showReuseMessage": false,
+          "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Restart Service",
+      "type": "shell",
+      "command": "docker-compose -p aggie-experts restart ${input:serviceName}",
+      "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "new",
+          "showReuseMessage": false,
+          "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Open Shell",
+      "type": "shell",
+      "command": "docker-compose -p aggie-experts exec ${input:serviceName} bash",
+      "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "new",
+          "showReuseMessage": false,
+          "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Client Watch",
+      "type": "shell",
+      "command": "docker-compose -p aggie-experts exec spa npm run watch",
+      "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated",
+          "showReuseMessage": false,
+          "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Sleep",
+      "type": "shell",
+      "command": "sleep 5",
+      "presentation": {
+          "echo": true,
+          "reveal": "never",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run all local dev tasks",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Start Local Dev Cluster",
+        "Sleep",
+        "Run Client Watch"
+      ]
+    }
+  ]
+}
