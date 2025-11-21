@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dagster-storage-volume-claim
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeName: dagster-storage-volume

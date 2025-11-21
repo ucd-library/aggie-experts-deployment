@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dagster
+spec:
+  selector:
+    matchLabels:
+      app: dagster
+  template:
+    metadata:
+      labels:
+        app: dagster
+    spec:
+      containers:
+      - name: service
+        image: us-west1-docker.pkg.dev/digital-ucdavis-edu/jm-dev/harvest:sandbox
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "200m"
+        envFrom:
+          - configMapRef:
+              name: app-config
+          - secretRef:
+              name: secrets-config
+        volumeMounts:
+        - name: service-account
+          mountPath: /etc/fin/service-account.json
+          subPath: service-account.json
+        - name: dagster-storage-volume-claim
+          mountPath: /opt/dagster/dagster_home/storage
+        - name: caskfs-volume-claim
+          mountPath: /opt/cache
+      volumes:
+      - name: caskfs-volume-claim
+        persistentVolumeClaim:
+          claimName: caskfs-volume-claim
+      - name: dagster-storage-volume-claim
+        persistentVolumeClaim:
+          claimName: dagster-storage-volume-claim
+      - name: service-account
+        secret:
+          secretName: service-account

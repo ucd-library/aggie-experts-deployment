@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: superset
+spec:
+  selector:
+    matchLabels:
+      app: superset
+  replicas: 1
+  serviceName: superset
+  template:
+    metadata:
+      labels:
+        app: superset
+    spec:
+      containers:
+      - name: service
+        image: us-west1-docker.pkg.dev/digital-ucdavis-edu/jm-dev/superset:sandbox
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "200m"
+        env:
+        - name: DASHBOARD_FILE
+          value: gs://anduin-dashboards/dashboard_prod.zip
+        envFrom:
+          - configMapRef:
+              name: app-config
+          - secretRef:
+              name: secrets-config
+        volumeMounts:
+        - name: superset-home
+          mountPath: /app/superset
+        - name: superset-init
+          mountPath: /etc/superset/init
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 4000
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 5
+          failureThreshold: 1
+  volumeClaimTemplates:
+  - metadata:
+      name: superset-home
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
+  - metadata:
+      name: superset-init
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi

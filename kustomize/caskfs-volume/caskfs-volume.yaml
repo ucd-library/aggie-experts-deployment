@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: caskfs-volume
+spec:
+  storageClassName: nfs-csi
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 250Gi

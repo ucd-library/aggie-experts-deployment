@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caskfs-ui
+spec:
+  selector:
+    matchLabels:
+      app: caskfs-ui
+  template:
+    metadata:
+      labels:
+        app: caskfs-ui
+    spec:
+      containers:
+      - name: service
+        image: us-west1-docker.pkg.dev/digital-ucdavis-edu/jm-dev/harvest:sandbox
+        imagePullPolicy: Always
+        command: ["cask", "serve"]
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "200m"
+        envFrom:
+          - configMapRef:
+              name: app-config
+          - secretRef:
+              name: secrets-config
+        volumeMounts:
+          - name: caskfs-volume-claim
+            mountPath: /opt/cache
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 5
+          failureThreshold: 1
+      volumes:
+      - name: caskfs-volume-claim
+        persistentVolumeClaim:
+          claimName: caskfs-volume-claim
