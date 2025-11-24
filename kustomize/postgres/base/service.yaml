@@ -5,7 +5,7 @@ metadata:
 spec:
   # this enables direct access to the pod from within the cluster
   # and no load balancing is done
-  clusterIP: None 
+  # clusterIP: None 
   selector:
     app: postgres
   ports:

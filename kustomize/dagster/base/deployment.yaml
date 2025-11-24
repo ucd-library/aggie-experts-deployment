@@ -35,10 +35,10 @@ spec:
       volumes:
       - name: caskfs-volume-claim
         persistentVolumeClaim:
-          claimName: caskfs-volume-claim
+          claimName: caskfs
       - name: dagster-storage-volume-claim
         persistentVolumeClaim:
-          claimName: dagster-storage-volume-claim
+          claimName: dagster-storage
       - name: service-account
         secret:
           secretName: service-account

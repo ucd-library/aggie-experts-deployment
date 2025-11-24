@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: caskfs-volume-claim
 spec:
-  accessModes:
-    - ReadWriteMany
-  volumeName: caskfs-volume
+  storageClassName: nfs-csi
+  resources:
+    requests:
+      storage: 20Gi

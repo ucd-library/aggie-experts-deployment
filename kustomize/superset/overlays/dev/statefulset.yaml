@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: superset
+spec:
+  template:
+    spec:
+      containers:
+        - name: service
+          image: us-west1-docker.pkg.dev/digital-ucdavis-edu/jm-dev/superset:dev
+  volumeClaimTemplates:
+    - metadata:
+        name: superset-home
+      spec:
+        storageClassName: nfs-csi
+    - metadata:
+        name: superset-init
+      spec:
+        storageClassName: nfs-csi

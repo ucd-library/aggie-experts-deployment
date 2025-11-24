@@ -6,6 +6,7 @@ ENVIRONMENT=$1
 AE_VERSION=$2
 
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd $ROOT_DIR/..
 
 ALLOWED_ENVIRONMENTS=("dev" "sandbox" "prod")
 
@@ -56,9 +57,12 @@ POSTGRES_VERSION=$(echo $JSON_DATA | jq -r ".builds[\"$ANDUIN_VERSION\"].postgre
 
 echo "Updating Aggie Experts to version: $AE_VERSION (CaskFS: $CASKFS_VERSION, Anduin: $ANDUIN_VERSION, Postgres: $POSTGRES_VERSION)"
 
-edit postgres statefulset "$OS_REGISTRY/postgres:$POSTGRES_VERSION" database ${ENVIRONMENT}
+edit postgres statefulset "$OS_REGISTRY/anduin-pg:$ANDUIN_VERSION" database ${ENVIRONMENT}
 edit elastic-search statefulset "$AE_REGISTRY/elastic-search:$AE_VERSION" elasticsearch ${ENVIRONMENT}
 
-edit anduin-gateway deployment "$AE_REGISTRY/auth-gateway:$AE_VERSION" service ${ENVIRONMENT}
+edit anduin-gateway deployment "$AE_REGISTRY/anduin-gateway:$AE_VERSION" service ${ENVIRONMENT}
 edit caskfs-ui deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
 edit dagster/dagster-code-server deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
+edit dagster/dagster-daemon deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
+edit dagster/dagster-ui deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
+edit superset statefulset "$AE_REGISTRY/superset:$AE_VERSION" superset ${ENVIRONMENT}

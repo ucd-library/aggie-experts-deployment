@@ -8,4 +8,4 @@ configMapGenerator:
       - app.env
     options:
       # keep hashing ON so updates to app.env trigger rollout via name change
-      disableNameSuffixHash: false
+      disableNameSuffixHash: true

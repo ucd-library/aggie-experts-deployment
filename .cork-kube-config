@@ -39,6 +39,12 @@
       "path" : "kustomize/app-env"
     },
     {
+      "path" : "kustomize/volumes/caskfs-volume"
+    },
+    {
+      "path" : "kustomize/volumes/dagster-storage-volume"
+    },
+    {
       "path" : "kustomize/postgres"
     },
     {
@@ -46,6 +52,24 @@
     },
     {
       "path" : "kustomize/kibana"
+    },
+    {
+      "path" : "kustomize/dagster/dagster-daemon"
+    },
+    {
+      "path" : "kustomize/dagster/dagster-code-server"
+    },
+    {
+      "path" : "kustomize/dagster/dagster-ui"
+    },
+    {
+      "path" : "kustomize/caskfs-ui"
+    },
+    {
+      "path" : "kustomize/anduin-gateway"
+    },
+    {
+      "path" : "kustomize/superset"
     }
   ]
 }

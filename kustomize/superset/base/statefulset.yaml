@@ -37,7 +37,15 @@ spec:
         readinessProbe:
           httpGet:
             path: /
-            port: 4000
+            port: 8088
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 5
+          failureThreshold: 1
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8088
           initialDelaySeconds: 5
           timeoutSeconds: 2
           periodSeconds: 5
