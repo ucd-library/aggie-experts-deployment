@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
         - name: database
-          image: us-west1-docker.pkg.dev/digital-ucdavis-edu/jm-dev/postgres:sandbox
+          image: us-west1-docker.pkg.dev/digital-ucdavis-edu/pub/postgres:16
   volumeClaimTemplates:
     - metadata:
         name: data-volume

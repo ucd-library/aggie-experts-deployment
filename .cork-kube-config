@@ -1,0 +1,51 @@
+{
+  "project" : "aggie-experts",
+
+  "environments" : {
+    "dev" : {
+      "project" : "aggie-experts",
+      "platform" : "microk8s",
+      "namespace" : "aggie-experts-dev",
+      "kubeconfig" : {
+        "secret" : "kubeconfig-dev-libk8s",
+        "context" : "microk8s"
+      }
+    }
+  },
+
+  "secrets" : {
+    "dev" : [{
+      "k8sName" : "kubeconfig",
+      "kubeconfig" : true
+    },
+    {
+      "k8sName" : "secrets-config",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-env",
+        "k8sProperty" : "secrets.env"
+      }]
+    },
+    {
+      "k8sName" : "service-account",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-service-account",
+        "k8sProperty" : "service-account.json"
+      }]
+    }]
+  },
+
+  "services" : [
+    {
+      "path" : "kustomize/app-env"
+    },
+    {
+      "path" : "kustomize/postgres"
+    },
+    {
+      "path" : "kustomize/elastic-search"
+    },
+    {
+      "path" : "kustomize/kibana"
+    }
+  ]
+}
