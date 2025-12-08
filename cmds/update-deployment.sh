@@ -65,4 +65,4 @@ edit caskfs-ui deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONME
 edit dagster/dagster-code-server deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
 edit dagster/dagster-daemon deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
 edit dagster/dagster-ui deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
-edit superset statefulset "$AE_REGISTRY/superset:$AE_VERSION" superset ${ENVIRONMENT}
+edit superset statefulset "$AE_REGISTRY/superset:$AE_VERSION" service ${ENVIRONMENT}

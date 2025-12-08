@@ -33,14 +33,14 @@ spec:
             - ALL
           runAsNonRoot: true
           runAsUser: 1000
-        readinessProbe:
-          httpGet:
-            path: /_cluster/health?wait_for_status=yellow&timeout=30s
-            port: 9200
-          initialDelaySeconds: 20
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 6
+        # readinessProbe:
+        #   httpGet:
+        #     path: /_cluster/health?wait_for_status=yellow&timeout=30s
+        #     port: 9200
+        #   initialDelaySeconds: 20
+        #   periodSeconds: 10
+        #   timeoutSeconds: 5
+        #   failureThreshold: 6
         livenessProbe:
           httpGet:
             path: /

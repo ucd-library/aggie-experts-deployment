@@ -23,7 +23,7 @@ spec:
           - configMapRef:
               name: app-config
           - secretRef:
-              name: secrets-config
+              name: dagster-postgres-password
         volumeMounts:
         - name: service-account
           mountPath: /etc/fin/service-account.json

@@ -28,7 +28,9 @@ spec:
           - configMapRef:
               name: app-config
           - secretRef:
-              name: secrets-config
+              name: postgres-password
+          - secretRef:
+              name: superset-secret-key
         volumeMounts:
         - name: superset-home
           mountPath: /app/superset

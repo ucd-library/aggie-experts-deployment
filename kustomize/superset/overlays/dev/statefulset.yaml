@@ -7,13 +7,23 @@ spec:
     spec:
       containers:
         - name: service
-          image: us-west1-docker.pkg.dev/digital-ucdavis-edu/jm-dev/superset:dev
+          image: us-west1-docker.pkg.dev/aggie-experts/pub/superset:anduin
   volumeClaimTemplates:
     - metadata:
         name: superset-home
       spec:
         storageClassName: nfs-csi
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
     - metadata:
         name: superset-init
       spec:
         storageClassName: nfs-csi
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi

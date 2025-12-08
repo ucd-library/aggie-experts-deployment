@@ -19,10 +19,31 @@
       "kubeconfig" : true
     },
     {
-      "k8sName" : "secrets-config",
+      "k8sName" : "postgres-password",
       "mappings" : [{
-        "gcsmName" : "libk8s-dev-env",
-        "k8sProperty" : "secrets.env"
+        "gcsmName" : "libk8s-dev-pg-password",
+        "k8sProperty" : "POSTGRES_PASSWORD"
+      }]
+    },
+    {
+      "k8sName" : "dagster-postgres-password",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-pg-password",
+        "k8sProperty" : "DAGSTER_POSTGRES_PASSWORD"
+      }]
+    },
+    {
+      "k8sName" : "superset-secret-key",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-superset-key",
+        "k8sProperty" : "SUPERSET_SECRET_KEY"
+      }]
+    },
+    {
+      "k8sName" : "oidc-client-secret",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-oidc-client-secret",
+        "k8sProperty" : "OIDC_CLIENT_SECRET"
       }]
     },
     {

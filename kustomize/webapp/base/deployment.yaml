@@ -23,7 +23,7 @@ spec:
           - configMapRef:
               name: app-config
           - secretRef:
-              name: secrets-config
+              name: postgres-password
         readinessProbe:
           httpGet:
             path: /

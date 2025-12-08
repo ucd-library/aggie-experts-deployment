@@ -22,17 +22,20 @@ spec:
           requests:
             memory: "200Mi"
             cpu: "200m"
+        env:
+          - name: CASKFS_WEBAPP_PATH_PREFIX
+            value: /cask
         envFrom:
           - configMapRef:
               name: app-config
           - secretRef:
-              name: secrets-config
+              name: postgres-password
         volumeMounts:
           - name: caskfs-volume-claim
             mountPath: /opt/cache
         readinessProbe:
           httpGet:
-            path: /
+            path: /cask
             port: 3000
           initialDelaySeconds: 5
           timeoutSeconds: 2
