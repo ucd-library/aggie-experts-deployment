@@ -26,7 +26,7 @@ spec:
               name: dagster-postgres-password
         volumeMounts:
         - name: service-account
-          mountPath: /etc/fin/service-account.json
+          mountPath: /etc/aggie-experts/service-account.json
           subPath: service-account.json
         - name: dagster-storage-volume-claim
           mountPath: /opt/dagster/dagster_home/storage

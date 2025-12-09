@@ -78,6 +78,39 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /usr/share/elasticsearch/data
+      # - name: init-pipeline
+      #   image: curlimages/curl:latest
+      #   command:
+      #     - /bin/sh
+      #     - -c
+      #     - |
+      #       # Wait for Elasticsearch to be ready
+      #       for i in {1..30}; do
+      #         if curl -s -o /dev/null -w "%{http_code}" http://localhost:9200/ | grep -q "200"; then
+      #           echo "Elasticsearch is ready"
+      #           break
+      #         fi
+      #         echo "Waiting for Elasticsearch... attempt $i/30"
+      #         sleep 2
+      #       done
+            
+      #       # Check if pipeline exists
+      #       if curl -s -o /dev/null -w "%{http_code}" http://localhost:9200/_ingest/pipeline/aggie-experts-pipeline | grep -q "200"; then
+      #         echo "Pipeline already exists"
+      #         exit 0
+      #       else
+      #         echo "Creating pipeline..."
+      #         curl -X PUT -H "Content-Type: application/json" -d '{"description":"Adds a modified-date field","processors":[{"set":{"field":"modified-date","value":"{{_ingest.timestamp}}"}}]}' http://localhost:9200/_ingest/pipeline/aggie-experts-pipeline || exit 1
+      #         echo "Pipeline created successfully"
+      #         exit 0
+      #       fi
+      #   resources:
+      #     requests:
+      #       memory: "128Mi"
+      #       cpu: "100m"
+      #     limits:
+      #       memory: "256Mi"
+      #       cpu: "200m"
       initContainers:
       - name: fix-permissions
         image: busybox

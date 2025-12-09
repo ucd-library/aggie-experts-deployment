@@ -24,6 +24,9 @@ spec:
         env:
         - name: DASHBOARD_FILE
           value: gs://anduin-dashboards/dashboard_prod.zip
+        # hack to override default superset port that k8s inject with tcp://*.*.*.*:8088
+        - name: SUPERSET_PORT
+          value: "8088"
         envFrom:
           - configMapRef:
               name: app-config
@@ -33,25 +36,32 @@ spec:
               name: superset-secret-key
         volumeMounts:
         - name: superset-home
-          mountPath: /app/superset
+          mountPath: /app/superset_home
         - name: superset-init
           mountPath: /etc/superset/init
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8088
-          initialDelaySeconds: 5
-          timeoutSeconds: 2
-          periodSeconds: 5
-          failureThreshold: 1
+        - name: service-account
+          mountPath: /etc/aggie-experts/service-account.json
+          subPath: service-account.json
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 8088
+        #   initialDelaySeconds: 5
+        #   timeoutSeconds: 2
+        #   periodSeconds: 5
+        #   failureThreshold: 1
         livenessProbe:
           httpGet:
-            path: /
+            path: /superset/health
             port: 8088
           initialDelaySeconds: 5
           timeoutSeconds: 2
           periodSeconds: 5
           failureThreshold: 1
+      volumes:
+      - name: service-account
+        secret:
+          secretName: service-account
   volumeClaimTemplates:
   - metadata:
       name: superset-home
