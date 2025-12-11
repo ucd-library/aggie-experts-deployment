@@ -52,6 +52,12 @@
         "gcsmName" : "libk8s-dev-service-account",
         "k8sProperty" : "service-account.json"
       }]
+    },
+      {
+      "k8sName" : "experts-wildcard-tls",
+      "tls" : true,
+      "certGcsmName" : "tls-wildcard-cert",
+      "keyGcsmName" : "tls-wildcard-key"
     }]
   },
 

@@ -78,6 +78,8 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /usr/share/elasticsearch/data
+        - name: backups
+          mountPath: /usr/share/elasticsearch/backups
       # - name: init-pipeline
       #   image: curlimages/curl:latest
       #   command:
@@ -130,6 +132,13 @@ spec:
   volumeClaimTemplates:
   - metadata:
       name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
+  - metadata:
+      name: backups
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:

@@ -18,3 +18,12 @@ spec:
         resources:
           requests:
             storage: 50Gi
+    - metadata:
+        name: backups
+      spec:
+        storageClassName: nfs-csi
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi

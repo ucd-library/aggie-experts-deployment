@@ -13,4 +13,4 @@ spec:
     spec:
       containers:
       - name: service
-        command: ["dagster", "code-server", "start", "-h", "0.0.0.0", "-p", "4000", "-f", "/opt/harvest/defs.py"]
+        args: ["dagster", "code-server", "start", "-h", "0.0.0.0", "-p", "4000", "-f", "/opt/harvest/defs.py"]
