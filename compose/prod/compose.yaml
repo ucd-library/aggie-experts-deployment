@@ -70,7 +70,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - ${PG_DATA_DIR}:/var/lib/postgresql/data
 
   superset:
     # image: ${SUPERSET_IMAGE}
@@ -96,8 +96,8 @@ volumes:
     driver: local
   dagster_home:
     driver: local
-  pg_data:
-    driver: local
+  # pg_data:
+  #   driver: local
   superset_home:
     driver: local
   superset_init:
