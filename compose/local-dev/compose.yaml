@@ -14,12 +14,6 @@ services:
       - CASK_URL=http://caskfs-ui:3000
       - DAGSTER_URL=http://dagster-ui:3000
       - DEFAULT_DASHBOARD_LINK=/superset/superset/dashboard/1
-      - PROXY_ADDITIONAL_SERVICE_LINKS={"name":"webapp","title":"Webapp","subtitle":"Aggie Experts","link":"http://localhost:3000","color":"brand-secondary-70","icon":"fas fa-browser"}
-    volumes:
-      - ../../../../project-anduin/auth-gateway/controllers:/app/controllers
-      - ../../../../project-anduin/auth-gateway/lib:/app/lib
-      - ../../../../project-anduin/auth-gateway/client:/app/client
-      - ../../../../project-anduin/auth-gateway/index.js:/app/index.js
     ports:
       - "4000:4000"
 
@@ -34,7 +28,6 @@ services:
       - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
     volumes:
       - dagster_storage:/opt/dagster/dagster_home/storage
-      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
     depends_on:
       - postgres
       - dagster-code-server
@@ -54,14 +47,6 @@ services:
     volumes:
       # dagster
       - dagster_storage:/opt/dagster/dagster_home/storage
-      # caskfs code
-      - ../../../../caskfs/src:/opt/caskfs/src
-      # ae harvest code
-      - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
-      - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
-      - ../../../aggie-experts/harvest/vocabularies:/opt/harvest/vocabularies
-      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
-      - ../../../aggie-experts/service-account.json:/service-account.json
       - data_cache:/opt/cache
     depends_on:
       - postgres
@@ -82,15 +67,9 @@ services:
     volumes:
       # dagster
       - dagster_storage:/opt/dagster/dagster_home/storage
-      # caskfs code
-      - ../../../../caskfs/src:/opt/caskfs/src
-      # ae harvest code
-      - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
-      - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
-      - ../../../aggie-experts/harvest/vocabularies:/opt/harvest/vocabularies
-      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
-      - ../../../aggie-experts/service-account.json:/service-account.json
       - data_cache:/opt/cache
+    ports:
+      - "9229:9229"
     depends_on:
       - postgres
     command: ["dagster", "code-server", "start", "-h", "0.0.0.0", "-p", "4000", "-f", "/opt/harvest/defs.py"]
@@ -109,14 +88,13 @@ services:
       - CASKFS_WEBAPP_PATH_PREFIX=/cask
     volumes:
       # caskfs code
-      - ../../../../caskfs/src:/opt/caskfs/src
       - data_cache:/opt/cache
     depends_on:
       - postgres
     command: ["cask", "serve"]
 
   postgres:
-    image: ${IMAGE_PROJECT_ANDUIN_ANDUIN_PG}
+    image: ${IMAGE_AGGIE_EXPERTS_AE_POSTGRES}
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -141,9 +119,6 @@ services:
     volumes:
       - superset_home:/app/superset_home
       - superset_init:/etc/superset/init
-      - ../../../aggie-experts/service-account.json:/service-account.json
-      - ../../../../project-anduin/superset/superset_config.py:/app/superset_config.py
-      - ../../../../project-anduin/superset/custom_security_manager.py:/app/custom_security_manager.py
     # command: ["bash", "-c", "/app/docker/superset-start.sh"]
     # command: ["bash", "-c", "tail -f /dev/null"]
 
@@ -171,9 +146,6 @@ services:
 
   gateway:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
-    volumes:
-      - ../../../aggie-experts/webapp/lib:/app/lib
-      - ../../../aggie-experts/webapp/models:/app/models
     ports:
       - "8080:3000"
     depends_on:
@@ -185,13 +157,6 @@ services:
 
   spa:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
-    volumes:
-      - ../../../aggie-experts/webapp/lib:/app/lib
-      - ../../../aggie-experts/webapp/models:/app/models
-      - ../../../aggie-experts/webapp/spa/controllers:/app/spa/controllers
-      - ../../../aggie-experts/webapp/spa/models:/app/spa/models
-      - ../../../aggie-experts/webapp/spa/config.js:/app/spa/config.js
-      - ../../../aggie-experts/webapp/spa/client:/app/spa/client
     environment:
       - CLIENT_ENV=${CLIENT_ENV:-production}
       - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
@@ -206,9 +171,6 @@ services:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
     env_file:
       - .env
-    volumes:
-      - ../../../aggie-experts/webapp/lib:/app/lib
-      - ../../../aggie-experts/webapp/models:/app/models
     depends_on:
       elasticsearch:
         condition: service_healthy
@@ -230,10 +192,6 @@ services:
         - telemetry.enabled=false
       depends_on:
         - elasticsearch
-
-networks:
-  default:
-    name: aggie_experts_prod
 
 volumes:
   data_cache:

@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: superset
+spec:
+  selector:
+    matchLabels:
+      app: superset
+  replicas: 1
+  serviceName: superset
+  template:
+    metadata:
+      labels:
+        app: superset
+    spec:
+      containers:
+      - name: service
+        image: us-west1-docker.pkg.dev/digital-ucdavis-edu/jm-dev/superset:sandbox
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "200m"
+        env:
+        - name: DASHBOARD_FILE
+          value: gs://anduin-dashboards/dashboard_prod.zip
+        # hack to override default superset port that k8s inject with tcp://*.*.*.*:8088
+        - name: SUPERSET_PORT
+          value: "8088"
+        envFrom:
+          - configMapRef:
+              name: app-config
+          - secretRef:
+              name: postgres-password
+          - secretRef:
+              name: superset-secret-key
+        volumeMounts:
+        - name: superset-home
+          mountPath: /app/superset_home
+        - name: superset-init
+          mountPath: /etc/superset/init
+        - name: service-account
+          mountPath: /etc/aggie-experts/service-account.json
+          subPath: service-account.json
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 8088
+        #   initialDelaySeconds: 5
+        #   timeoutSeconds: 2
+        #   periodSeconds: 5
+        #   failureThreshold: 1
+        livenessProbe:
+          httpGet:
+            path: /superset/health
+            port: 8088
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 5
+          failureThreshold: 1
+      volumes:
+      - name: service-account
+        secret:
+          secretName: service-account
+  volumeClaimTemplates:
+  - metadata:
+      name: superset-home
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
+  - metadata:
+      name: superset-init
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi

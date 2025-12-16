@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Generates: ConfigMap app-config-<hash> from app.env
+configMapGenerator:
+  - name: app-config
+    envs:
+      - app.env
+    options:
+      # keep hashing ON so updates to app.env trigger rollout via name change
+      disableNameSuffixHash: true

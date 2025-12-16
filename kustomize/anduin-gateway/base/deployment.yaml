@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anduin-gateway
+spec:
+  selector:
+    matchLabels:
+      app: anduin-gateway
+  template:
+    metadata:
+      labels:
+        app: anduin-gateway
+    spec:
+      containers:
+      - name: service
+        image: us-west1-docker.pkg.dev/digital-ucdavis-edu/jm-dev/auth-gateway:sandbox
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4000
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "200m"
+        env:
+        - name: PORT
+          value: "4000"
+        - name: APP_NAME
+          value: "Aggie Experts - Harvest"
+        envFrom:
+          - configMapRef:
+              name: app-config
+          - secretRef:
+              name: postgres-password
+          - secretRef:
+              name: oidc-client-secret
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 4000
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 5
+          failureThreshold: 1

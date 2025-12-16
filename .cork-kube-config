@@ -1,0 +1,102 @@
+{
+  "project" : "aggie-experts",
+
+  "environments" : {
+    "dev" : {
+      "project" : "aggie-experts",
+      "platform" : "microk8s",
+      "namespace" : "aggie-experts-dev",
+      "kubeconfig" : {
+        "secret" : "kubeconfig-dev-libk8s",
+        "context" : "microk8s"
+      }
+    }
+  },
+
+  "secrets" : {
+    "dev" : [{
+      "k8sName" : "kubeconfig",
+      "kubeconfig" : true
+    },
+    {
+      "k8sName" : "postgres-password",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-pg-password",
+        "k8sProperty" : "POSTGRES_PASSWORD"
+      }]
+    },
+    {
+      "k8sName" : "dagster-postgres-password",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-pg-password",
+        "k8sProperty" : "DAGSTER_POSTGRES_PASSWORD"
+      }]
+    },
+    {
+      "k8sName" : "superset-secret-key",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-superset-key",
+        "k8sProperty" : "SUPERSET_SECRET_KEY"
+      }]
+    },
+    {
+      "k8sName" : "oidc-client-secret",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-oidc-client-secret",
+        "k8sProperty" : "OIDC_CLIENT_SECRET"
+      }]
+    },
+    {
+      "k8sName" : "service-account",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-service-account",
+        "k8sProperty" : "service-account.json"
+      }]
+    },
+      {
+      "k8sName" : "experts-wildcard-tls",
+      "tls" : true,
+      "certGcsmName" : "tls-wildcard-cert",
+      "keyGcsmName" : "tls-wildcard-key"
+    }]
+  },
+
+  "services" : [
+    {
+      "path" : "kustomize/app-env"
+    },
+    {
+      "path" : "kustomize/volumes/caskfs-volume"
+    },
+    {
+      "path" : "kustomize/volumes/dagster-storage-volume"
+    },
+    {
+      "path" : "kustomize/postgres"
+    },
+    {
+      "path" : "kustomize/elastic-search"
+    },
+    {
+      "path" : "kustomize/kibana"
+    },
+    {
+      "path" : "kustomize/dagster/dagster-daemon"
+    },
+    {
+      "path" : "kustomize/dagster/dagster-code-server"
+    },
+    {
+      "path" : "kustomize/dagster/dagster-ui"
+    },
+    {
+      "path" : "kustomize/caskfs-ui"
+    },
+    {
+      "path" : "kustomize/anduin-gateway"
+    },
+    {
+      "path" : "kustomize/superset"
+    }
+  ]
+}
