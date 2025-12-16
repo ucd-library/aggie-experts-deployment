@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: database
-        image: us-west1-docker.pkg.dev/digital-ucdavis-edu/jm-dev/postgres:sandbox
+        image: us-west1-docker.pkg.dev/digital-ucdavis-edu/jm-dev/ae-postgres:sandbox
         args: ["-c", "max_connections=200"]
         imagePullPolicy: Always
         env:

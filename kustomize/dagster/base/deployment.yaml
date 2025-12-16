@@ -19,6 +19,9 @@ spec:
           requests:
             memory: "200Mi"
             cpu: "200m"
+        env:
+          - name: EXPERTS_CACHE_POOL_DB_CONNECTION
+            value: "true"
         envFrom:
           - configMapRef:
               name: app-config

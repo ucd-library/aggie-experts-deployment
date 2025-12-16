@@ -57,7 +57,8 @@ POSTGRES_VERSION=$(echo $JSON_DATA | jq -r ".builds[\"$ANDUIN_VERSION\"].postgre
 
 echo "Updating Aggie Experts to version: $AE_VERSION (CaskFS: $CASKFS_VERSION, Anduin: $ANDUIN_VERSION, Postgres: $POSTGRES_VERSION)"
 
-edit postgres statefulset "$OS_REGISTRY/anduin-pg:$ANDUIN_VERSION" database ${ENVIRONMENT}
+# edit postgres statefulset "$OS_REGISTRY/anduin-pg:$ANDUIN_VERSION" database ${ENVIRONMENT}
+edit postgres statefulset "$AE_REGISTRY/ae-postgres:$AE_VERSION" database ${ENVIRONMENT}
 edit elastic-search statefulset "$AE_REGISTRY/elastic-search:$AE_VERSION" elasticsearch ${ENVIRONMENT}
 
 edit anduin-gateway deployment "$AE_REGISTRY/anduin-gateway:$AE_VERSION" service ${ENVIRONMENT}
