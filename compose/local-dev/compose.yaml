@@ -147,7 +147,7 @@ services:
     # command: ["bash", "-c", "tail -f /dev/null"]
 
   elasticsearch:
-    image: ${IMAGE_FIN_FIN_ELASTIC_SEARCH}
+    image: ${IMAGE_AGGIE_EXPERTS_ELASTIC_SEARCH}
     environment:
       - node.name=elasticsearch
       - bootstrap.memory_lock=true
