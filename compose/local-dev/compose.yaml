@@ -87,6 +87,7 @@ services:
       - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
       - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
       - ../../../aggie-experts/harvest/vocabularies:/opt/harvest/vocabularies
+      - ../../../aggie-experts/webapp/models/search/template:/opt/webapp/models/search/template
       - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
       - ../../../aggie-experts/service-account.json:/service-account.json
       - data_cache:/opt/cache
