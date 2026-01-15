@@ -76,6 +76,34 @@ services:
       - postgres
     command: ["dagster", "code-server", "start", "-h", "0.0.0.0", "-p", "4000", "-f", "/opt/harvest/defs.py"]
 
+  dagster-celery-worker:
+    image: ${IMAGE_AGGIE_EXPERTS_HARVEST}
+    env_file:
+      - .env
+    environment:
+      - EXPERTS_CACHE_ROOT_DIR=/opt/cache
+      - DAGSTER_POSTGRES_USER=postgres
+      - DAGSTER_POSTGRES_PASSWORD=postgres
+      - DAGSTER_POSTGRES_DB=dagster
+      - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
+      - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
+    volumes:
+      # dagster
+      - ./service-account.json:/service-account.json:ro
+      - dagster_storage:/opt/dagster/dagster_home/storage
+      - data_cache:/opt/cache
+    depends_on:
+      - rabbitmq
+      - postgres
+      - dagster-code-server
+    command: ["dagster-celery", "worker", "start", "-A", "dagster_celery.app", "-y", "/opt/dagster/dagster_home/celery_config.yaml"]
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672" 
+
   caskfs-ui:
     image: ${IMAGE_AGGIE_EXPERTS_HARVEST}
     env_file:
