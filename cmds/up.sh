@@ -12,7 +12,7 @@ fi
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $ROOT_DIR/..
 
-docker compose -f compose/$VERSION/compose.yaml -p aggie-experts up -d
+docker compose -f compose/$VERSION/compose.yaml -p aggie-experts up --scale dagster-celery-worker=2 -d
 
 echo "Aggie Experts deployment ($VERSION) is up and running."
 echo " - Harvest (Anduin) URL  : http://localhost:4000"
