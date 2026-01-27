@@ -149,7 +149,7 @@ services:
       - CASKFS_WEBAPP_PATH_PREFIX=/cask
     volumes:
       # caskfs code
-      - ../../../../caskfs/src:/opt/caskfs/src
+      # - ../../../../caskfs/src:/opt/caskfs/src
       - data_cache:/opt/cache
     depends_on:
       - postgres
