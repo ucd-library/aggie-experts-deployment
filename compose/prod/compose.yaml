@@ -218,3 +218,5 @@ volumes:
     driver: local
   es-data:
     driver: local
+  rabbitmq_data:
+    driver: local
