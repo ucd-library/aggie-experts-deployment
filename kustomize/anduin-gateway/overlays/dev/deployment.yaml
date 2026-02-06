@@ -11,3 +11,5 @@ spec:
           env:
             - name: APP_URL
               value: "https://harvest-dev.experts.library.ucdavis.edu"
+      nodeSelector:
+        intended-for: ae-dev-harvest

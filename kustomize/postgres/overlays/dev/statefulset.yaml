@@ -8,11 +8,13 @@ spec:
       containers:
         - name: database
           image: us-west1-docker.pkg.dev/aggie-experts/pub/ae-postgres:anduin
+      nodeSelector:
+        intended-for: ae-dev-harvest
   volumeClaimTemplates:
     - metadata:
         name: data-volume
       spec:
-        storageClassName: nfs-csi
+        storageClassName: microk8s-hostpath
         accessModes:
           - ReadWriteOnce
         resources:

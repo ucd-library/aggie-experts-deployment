@@ -8,11 +8,13 @@ spec:
       containers:
         - name: service
           image: us-west1-docker.pkg.dev/digital-ucdavis-edu/pub/superset:main
+      nodeSelector:
+        intended-for: ae-dev-harvest
   volumeClaimTemplates:
     - metadata:
         name: superset-home
       spec:
-        storageClassName: nfs-csi
+        storageClassName: microk8s-hostpath
         accessModes:
           - ReadWriteOnce
         resources:
@@ -21,7 +23,7 @@ spec:
     - metadata:
         name: superset-init
       spec:
-        storageClassName: nfs-csi
+        storageClassName: microk8s-hostpath
         accessModes:
           - ReadWriteOnce
         resources:

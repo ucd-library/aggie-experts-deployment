@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - ../../base
 patches:
-  - path: deployment.yaml
+  - path: statefulset.yaml
     target:
-      kind: Deployment
-      name: dagster-code-server
+      kind: StatefulSet
+      name: rabbitmq

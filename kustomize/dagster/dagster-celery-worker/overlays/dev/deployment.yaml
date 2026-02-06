@@ -3,8 +3,11 @@ kind: Deployment
 metadata:
   name: dagster-code-server
 spec:
+  replicas: 3
   template:
     spec:
       containers:
         - name: service
           image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:anduin
+      nodeSelector:
+        intended-for: ae-dev-harvest

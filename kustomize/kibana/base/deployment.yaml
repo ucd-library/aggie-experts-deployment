@@ -27,3 +27,5 @@ spec:
           value: "false"
         - name: telemetry.enabled
           value: "false"
+      nodeSelector:
+        intended-for: ae-dev-harvest

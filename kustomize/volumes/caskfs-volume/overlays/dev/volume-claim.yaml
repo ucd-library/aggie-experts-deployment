@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: caskfs
 spec:
-  storageClassName: nfs-csi
   resources:
     requests:
-      storage: 250Gi
+      storage: 50Gi
+  storageClassName: microk8s-hostpath

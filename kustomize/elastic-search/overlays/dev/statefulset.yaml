@@ -8,22 +8,15 @@ spec:
       containers:
         - name: elasticsearch
           image: us-west1-docker.pkg.dev/aggie-experts/pub/elastic-search:anduin
+      nodeSelector:
+        intended-for: ae-dev-frontend
   volumeClaimTemplates:
     - metadata:
         name: data
       spec:
-        storageClassName: nfs-csi
+        storageClassName: microk8s-hostpath
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
-    - metadata:
-        name: backups
-      spec:
-        storageClassName: nfs-csi
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 50Gi
+            storage: 15Gi

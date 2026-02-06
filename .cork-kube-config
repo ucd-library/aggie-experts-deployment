@@ -75,6 +75,9 @@
       "path" : "kustomize/postgres"
     },
     {
+      "path" : "kustomize/rabbitmq"
+    },
+    {
       "path" : "kustomize/elastic-search"
     },
     {
@@ -84,7 +87,7 @@
       "path" : "kustomize/dagster/dagster-daemon"
     },
     {
-      "path" : "kustomize/dagster/dagster-code-server"
+      "path" : "kustomize/dagster/dagster-celery-worker"
     },
     {
       "path" : "kustomize/dagster/dagster-ui"
