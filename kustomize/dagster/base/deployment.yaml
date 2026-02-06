@@ -27,6 +27,8 @@ spec:
               name: app-config
           - secretRef:
               name: dagster-postgres-password
+          - secretRef:
+              name: slack-webhook-url
         volumeMounts:
         - name: service-account
           mountPath: /etc/aggie-experts/service-account.json

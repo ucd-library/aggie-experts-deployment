@@ -40,6 +40,13 @@
       }]
     },
     {
+      "k8sName" : "slack-webhook-url",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-slack-webhook-url",
+        "k8sProperty" : "SLACK_WEBHOOK_URL"
+      }]
+    },
+    {
       "k8sName" : "oidc-client-secret",
       "mappings" : [{
         "gcsmName" : "libk8s-dev-oidc-client-secret",
@@ -53,7 +60,7 @@
         "k8sProperty" : "service-account.json"
       }]
     },
-      {
+    {
       "k8sName" : "experts-wildcard-tls",
       "tls" : true,
       "certGcsmName" : "tls-wildcard-cert",
