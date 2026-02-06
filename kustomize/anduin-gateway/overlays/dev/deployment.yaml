@@ -8,8 +8,5 @@ spec:
       containers:
         - name: service
           image: us-west1-docker.pkg.dev/aggie-experts/pub/anduin-gateway:anduin
-          env:
-            - name: APP_URL
-              value: "https://harvest-dev.experts.library.ucdavis.edu"
       nodeSelector:
         intended-for: ae-dev-harvest

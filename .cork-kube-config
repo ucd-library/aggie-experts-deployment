@@ -47,6 +47,13 @@
       }]
     },
     {
+      "k8sName" : "jwt-secret",
+      "mappings" : [{
+        "gcsmName" : "libk8s-dev-jwt-secret",
+        "k8sProperty" : "JWT_SECRET"
+      }]
+    },
+    {
       "k8sName" : "oidc-client-secret",
       "mappings" : [{
         "gcsmName" : "libk8s-dev-oidc-client-secret",
@@ -107,6 +114,15 @@
     },
     {
       "path" : "kustomize/superset"
+    },
+    {
+      "path" : "kustomize/webapp/gateway"
+    },
+    {
+      "path" : "kustomize/webapp/spa"
+    },
+    {
+      "path" : "kustomize/webapp/api"
     }
   ]
 }

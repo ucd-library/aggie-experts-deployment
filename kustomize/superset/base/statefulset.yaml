@@ -50,14 +50,14 @@ spec:
         #   timeoutSeconds: 2
         #   periodSeconds: 5
         #   failureThreshold: 1
-        livenessProbe:
-          httpGet:
-            path: /superset/health
-            port: 8088
-          initialDelaySeconds: 5
-          timeoutSeconds: 2
-          periodSeconds: 5
-          failureThreshold: 1
+        # livenessProbe:
+        #   httpGet:
+        #     path: /superset/health
+        #     port: 8088
+        #   initialDelaySeconds: 5
+        #   timeoutSeconds: 2
+        #   periodSeconds: 5
+        #   failureThreshold: 1
       volumes:
       - name: service-account
         secret:

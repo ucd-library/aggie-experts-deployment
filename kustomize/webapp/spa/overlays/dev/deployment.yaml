@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-spa
+spec:
+  template:
+    spec:
+      containers:
+      - name: service
+        image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:anduin
+        env:
+          - name: CLIENT_ENV
+            value: "prod"
+          - name: EXPERTS_IS_PUBLIC
+            value: "true"

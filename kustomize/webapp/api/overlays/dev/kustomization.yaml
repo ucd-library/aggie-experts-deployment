@@ -3,12 +3,8 @@ kind: Kustomization
 
 resources:
 - ../../base
-- service.yaml
-
 patches:
   - path: deployment.yaml
     target:
       kind: Deployment
-      name: webapp
-    options:
-      allowNameChange: true   
+      name: webapp-api

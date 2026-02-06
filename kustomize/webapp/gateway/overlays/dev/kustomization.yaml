@@ -3,12 +3,10 @@ kind: Kustomization
 
 resources:
 - ../../base
-- service.yaml
+- ingress.yaml
 
 patches:
   - path: deployment.yaml
     target:
       kind: Deployment
-      name: webapp
-    options:
-      allowNameChange: true   
+      name: webapp-gateway

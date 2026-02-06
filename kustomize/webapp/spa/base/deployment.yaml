@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-spa
+spec:
+  selector:
+    matchLabels:
+      app: webapp-spa
+  template:
+    metadata:
+      labels:
+        app: webapp-spa
+    spec:
+      containers:
+      - name: service
+        command: ["npm", "run", "spa"]

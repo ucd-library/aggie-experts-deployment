@@ -11,4 +11,4 @@ patches:
       kind: Deployment
       name: webapp
     options:
-      allowNameChange: true   
+      allowNameChange: true
