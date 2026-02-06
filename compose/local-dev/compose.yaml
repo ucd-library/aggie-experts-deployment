@@ -219,6 +219,8 @@ services:
 
   gateway:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
+    env_file:
+      - .env
     volumes:
       - ../../../aggie-experts/webapp/lib:/app/lib
       - ../../../aggie-experts/webapp/models:/app/models
@@ -240,6 +242,7 @@ services:
       - ../../../aggie-experts/webapp/spa/models:/app/spa/models
       - ../../../aggie-experts/webapp/spa/config.js:/app/spa/config.js
       - ../../../aggie-experts/webapp/spa/client:/app/spa/client
+      - ../../../aggie-experts/webapp/spa/index.js:/app/spa/index.js
     environment:
       - CLIENT_ENV=${CLIENT_ENV:-production}
       - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
