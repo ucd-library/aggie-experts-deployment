@@ -128,6 +128,7 @@ services:
       - ../../../aggie-experts/harvest/vocabularies:/opt/harvest/vocabularies
       - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
       - ../../../aggie-experts/service-account.json:/service-account.json
+      - ../../../aggie-experts/webapp/models/search/template:/opt/harvest/lib/models/search/template
       - data_cache:/opt/cache
     command: ["dagster-celery", "worker", "start", "-A", "dagster_celery.app", "-y", "/opt/dagster/dagster_home/celery_config.yaml"]
     depends_on:
