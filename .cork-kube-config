@@ -80,10 +80,12 @@
       "path" : "kustomize/app-env"
     },
     {
-      "path" : "kustomize/volumes/caskfs-volume"
+      "path" : "kustomize/volumes/caskfs-volume",
+      "group" : "anduin"
     },
     {
-      "path" : "kustomize/volumes/dagster-storage-volume"
+      "path" : "kustomize/volumes/dagster-storage-volume",
+      "group" : "anduin"
     },
     {
       "path" : "kustomize/postgres"
@@ -98,31 +100,40 @@
       "path" : "kustomize/kibana"
     },
     {
-      "path" : "kustomize/dagster/dagster-daemon"
+      "path" : "kustomize/dagster/dagster-daemon",
+      "group" : "anduin"
     },
     {
-      "path" : "kustomize/dagster/dagster-celery-worker"
+      "path" : "kustomize/dagster/dagster-celery-worker",
+      "group" : "anduin"
     },
     {
-      "path" : "kustomize/dagster/dagster-ui"
+      "path" : "kustomize/dagster/dagster-ui",
+      "group" : "anduin"
     },
     {
-      "path" : "kustomize/caskfs-ui"
+      "path" : "kustomize/caskfs-ui",
+      "group" : "anduin"
     },
     {
-      "path" : "kustomize/anduin-gateway"
+      "path" : "kustomize/anduin-gateway",
+      "group" : "anduin"
     },
     {
-      "path" : "kustomize/superset"
+      "path" : "kustomize/superset",
+      "group" : "anduin"
     },
     {
-      "path" : "kustomize/webapp/gateway"
+      "path" : "kustomize/webapp/gateway",
+      "group" : "webapp"
     },
     {
-      "path" : "kustomize/webapp/spa"
+      "path" : "kustomize/webapp/spa",
+      "group" : "webapp"
     },
     {
-      "path" : "kustomize/webapp/api"
+      "path" : "kustomize/webapp/api",
+      "group" : "webapp"
     }
   ]
 }

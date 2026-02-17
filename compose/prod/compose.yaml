@@ -62,6 +62,7 @@ services:
       - DAGSTER_POSTGRES_PASSWORD=postgres
       - DAGSTER_POSTGRES_DB=dagster
       - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
+      - CASKFS_LOG_LEVEL=warn
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
     volumes:
       # dagster
