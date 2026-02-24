@@ -65,7 +65,6 @@ services:
       - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
       - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
       - ../../../aggie-experts/harvest/vocabularies:/opt/harvest/vocabularies
-      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
       - ../../../aggie-experts/service-account.json:/service-account.json
       - data_cache:/opt/cache
     depends_on:
@@ -121,8 +120,11 @@ services:
       - dagster_storage:/opt/dagster/dagster_home/storage
       - ../../../aggie-experts/dagster/celery_config.yaml:/opt/dagster/dagster_home/celery_config.yaml
       - ../../../aggie-experts/dagster/dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
+      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
       # caskfs code
       - ../../../../caskfs/src:/opt/caskfs/src
+      # search templates
+      - ../../../aggie-experts/webapp/models/search/template:/opt/webapp/models/search/template
       # ae harvest code
       - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
       - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
