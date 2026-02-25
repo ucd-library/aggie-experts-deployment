@@ -129,7 +129,6 @@ services:
       - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
       - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
       - ../../../aggie-experts/harvest/vocabularies:/opt/harvest/vocabularies
-      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
       - ../../../aggie-experts/service-account.json:/service-account.json
       - data_cache:/opt/cache
     command: ["dagster-celery", "worker", "start", "-A", "dagster_celery.app", "-y", "/opt/dagster/dagster_home/celery_config.yaml"]
@@ -153,7 +152,11 @@ services:
       - CASKFS_WEBAPP_PATH_PREFIX=/cask
     volumes:
       # caskfs code
-      # - ../../../../caskfs/src:/opt/caskfs/src
+      - ../../../../caskfs/src/api:/opt/caskfs/src/api
+      - ../../../../caskfs/src/bin:/opt/caskfs/src/bin
+      - ../../../../caskfs/src/lib:/opt/caskfs/src/lib
+      - ../../../../caskfs/src/schema:/opt/caskfs/src/schema
+      - ../../../../caskfs/src/index.js:/opt/caskfs/src/index.js
       - data_cache:/opt/cache
     depends_on:
       - postgres
