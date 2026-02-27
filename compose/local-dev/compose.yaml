@@ -34,7 +34,8 @@ services:
       - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
     volumes:
       - dagster_storage:/opt/dagster/dagster_home/storage
-      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
+      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/dagster/defs.py
+      - ../../../aggie-experts/dagster/lib:/opt/harvest/dagster/lib
       - ../../../aggie-experts/dagster/workspace.yaml:/opt/dagster/dagster_home/workspace.yaml
       - ../../../aggie-experts/dagster/dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
     depends_on:
@@ -58,7 +59,8 @@ services:
       - dagster_storage:/opt/dagster/dagster_home/storage
       - ../../../aggie-experts/dagster/workspace.yaml:/opt/dagster/dagster_home/workspace.yaml
       - ../../../aggie-experts/dagster/dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
-      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
+      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/dagster/defs.py
+      - ../../../aggie-experts/dagster/lib:/opt/harvest/dagster/lib
       # caskfs code
       - ../../../../caskfs/src:/opt/caskfs/src
       # ae harvest code
@@ -120,7 +122,8 @@ services:
       - dagster_storage:/opt/dagster/dagster_home/storage
       - ../../../aggie-experts/dagster/celery_config.yaml:/opt/dagster/dagster_home/celery_config.yaml
       - ../../../aggie-experts/dagster/dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
-      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/defs.py
+      - ../../../aggie-experts/dagster/defs.py:/opt/harvest/dagster/defs.py
+      - ../../../aggie-experts/dagster/lib:/opt/harvest/dagster/lib
       # caskfs code
       - ../../../../caskfs/src:/opt/caskfs/src
       # search templates
