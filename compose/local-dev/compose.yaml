@@ -253,6 +253,7 @@ services:
       - ../../../aggie-experts/webapp/spa/config.js:/app/spa/config.js
       - ../../../aggie-experts/webapp/spa/client:/app/spa/client
       - ../../../aggie-experts/webapp/spa/index.js:/app/spa/index.js
+      - ../../../aggie-experts/harvest/lib:/app/harvest/lib
     environment:
       - CLIENT_ENV=${CLIENT_ENV:-production}
       - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
@@ -267,9 +268,14 @@ services:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
     env_file:
       - .env
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
     volumes:
       - ../../../aggie-experts/webapp/lib:/app/lib
       - ../../../aggie-experts/webapp/models:/app/models
+      # # harvest code
+      - ../../../aggie-experts/harvest/lib:/app/harvest/lib
+      - ../../../aggie-experts/service-account.json:/service-account.json
     depends_on:
       elasticsearch:
         condition: service_healthy
