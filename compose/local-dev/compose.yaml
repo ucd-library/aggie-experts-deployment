@@ -16,10 +16,10 @@ services:
       - AE_URL=http://localhost:8080
       - DEFAULT_DASHBOARD_LINK=/superset/superset/dashboard/1
     volumes:
-      - ../../../../project-anduin/auth-gateway/controllers:/app/controllers
-      - ../../../../project-anduin/auth-gateway/lib:/app/lib
-      - ../../../../project-anduin/auth-gateway/client:/app/client
-      - ../../../../project-anduin/auth-gateway/index.js:/app/index.js
+      - ../../../../project-anduin/auth-gateway/controllers:/opt/webapp/controllers
+      - ../../../../project-anduin/auth-gateway/lib:/opt/webapp/lib
+      - ../../../../project-anduin/auth-gateway/client:/opt/webapp/client
+      - ../../../../project-anduin/auth-gateway/index.js:/opt/webapp/index.js
     ports:
       - "4000:4000"
 
@@ -33,6 +33,10 @@ services:
       - DAGSTER_POSTGRES_DB=dagster
       - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
     volumes:
+      # commons
+      - ../../../aggie-experts/commons/lib:/opt/commons/lib
+      - ../../../aggie-experts/commons/index.js:/opt/commons/index.js
+      # dagster
       - dagster_storage:/opt/dagster/dagster_home/storage
       - ../../../aggie-experts/dagster/defs.py:/opt/harvest/dagster/defs.py
       - ../../../aggie-experts/dagster/lib:/opt/harvest/dagster/lib
@@ -55,6 +59,9 @@ services:
       - DAGSTER_POSTGRES_DB=dagster
       - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
     volumes:
+      # commons
+      - ../../../aggie-experts/commons/lib:/opt/commons/lib
+      - ../../../aggie-experts/commons/index.js:/opt/commons/index.js
       # dagster
       - dagster_storage:/opt/dagster/dagster_home/storage
       - ../../../aggie-experts/dagster/workspace.yaml:/opt/dagster/dagster_home/workspace.yaml
@@ -118,6 +125,9 @@ services:
       - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
     volumes:
+      # commons
+      - ../../../aggie-experts/commons/lib:/opt/commons/lib
+      - ../../../aggie-experts/commons/index.js:/opt/commons/index.js
       # dagster
       - dagster_storage:/opt/dagster/dagster_home/storage
       - ../../../aggie-experts/dagster/celery_config.yaml:/opt/dagster/dagster_home/celery_config.yaml
@@ -197,11 +207,11 @@ services:
     depends_on:
       - postgres
     volumes:
-      - superset_home:/app/superset_home
+      - superset_home:/opt/webapp/superset_home
       - superset_init:/etc/superset/init
       - ../../../aggie-experts/service-account.json:/service-account.json
-      - ../../../../project-anduin/superset/superset_config.py:/app/superset_config.py
-      - ../../../../project-anduin/superset/custom_security_manager.py:/app/custom_security_manager.py
+      - ../../../../project-anduin/superset/superset_config.py:/opt/webapp/superset_config.py
+      - ../../../../project-anduin/superset/custom_security_manager.py:/opt/webapp/custom_security_manager.py
     # command: ["bash", "-c", "/app/docker/superset-start.sh"]
     # command: ["bash", "-c", "tail -f /dev/null"]
 
@@ -229,31 +239,42 @@ services:
 
   gateway:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
     env_file:
       - .env
     volumes:
-      - ../../../aggie-experts/webapp/lib:/app/lib
-      - ../../../aggie-experts/webapp/models:/app/models
+      - ../../../aggie-experts/service-account.json:/service-account.json
+      # commons
+      - ../../../aggie-experts/commons/lib:/opt/commons/lib
+      - ../../../aggie-experts/commons/index.js:/opt/commons/index.js
+      # webapp code
+      - ../../../aggie-experts/webapp/lib:/opt/webapp/lib
+      - ../../../aggie-experts/webapp/models:/opt/webapp/models
     ports:
       - "8080:3000"
     depends_on:
       elasticsearch:
         condition: service_healthy
     restart: unless-stopped
-    command: npm run gateway
-    # command: bash -c 'tail -f /dev/null'
+    # command: npm run gateway
+    command: bash -c 'tail -f /dev/null'
 
   spa:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
     volumes:
-      - ../../../aggie-experts/webapp/lib:/app/lib
-      - ../../../aggie-experts/webapp/models:/app/models
-      - ../../../aggie-experts/webapp/spa/controllers:/app/spa/controllers
-      - ../../../aggie-experts/webapp/spa/models:/app/spa/models
-      - ../../../aggie-experts/webapp/spa/config.js:/app/spa/config.js
-      - ../../../aggie-experts/webapp/spa/client:/app/spa/client
-      - ../../../aggie-experts/webapp/spa/index.js:/app/spa/index.js
-      - ../../../aggie-experts/harvest/lib:/app/harvest/lib
+      # commons
+      - ../../../aggie-experts/commons/lib:/opt/commons/lib
+      - ../../../aggie-experts/commons/index.js:/opt/commons/index.js
+      # webapp code
+      - ../../../aggie-experts/webapp/lib:/opt/webapp/lib
+      - ../../../aggie-experts/webapp/models:/opt/webapp/models
+      - ../../../aggie-experts/webapp/spa/controllers:/opt/webapp/spa/controllers
+      - ../../../aggie-experts/webapp/spa/models:/opt/webapp/spa/models
+      - ../../../aggie-experts/webapp/spa/config.js:/opt/webapp/spa/config.js
+      - ../../../aggie-experts/webapp/spa/client:/opt/webapp/spa/client
+      - ../../../aggie-experts/webapp/spa/index.js:/opt/webapp/spa/index.js
+      - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
     environment:
       - CLIENT_ENV=${CLIENT_ENV:-production}
       - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
@@ -271,10 +292,14 @@ services:
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
     volumes:
-      - ../../../aggie-experts/webapp/lib:/app/lib
-      - ../../../aggie-experts/webapp/models:/app/models
+      # commons
+      - ../../../aggie-experts/commons/lib:/opt/commons/lib
+      - ../../../aggie-experts/commons/index.js:/opt/commons/index.js
+      # webapp code
+      - ../../../aggie-experts/webapp/lib:/opt/webapp/lib
+      - ../../../aggie-experts/webapp/models:/opt/webapp/models
       # # harvest code
-      - ../../../aggie-experts/harvest/lib:/app/harvest/lib
+      - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
       - ../../../aggie-experts/service-account.json:/service-account.json
     depends_on:
       elasticsearch:
