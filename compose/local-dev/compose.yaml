@@ -241,6 +241,7 @@ services:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
+      - AE_URL=http://localhost:8080
     env_file:
       - .env
     volumes:
