@@ -257,8 +257,8 @@ services:
       elasticsearch:
         condition: service_healthy
     restart: unless-stopped
-    # command: npm run gateway
-    command: bash -c 'tail -f /dev/null'
+    command: npm run gateway
+    # command: bash -c 'tail -f /dev/null'
 
   spa:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
