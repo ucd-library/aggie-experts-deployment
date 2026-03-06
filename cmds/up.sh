@@ -1,6 +1,6 @@
 #! /bin/bash
 
-KNOWN_VERSIONS=("prod" "stage" "local-dev")
+KNOWN_VERSIONS=("prod" "local-dev")
 VERSION=$1
 
 if [[ ! " ${KNOWN_VERSIONS[@]} " =~ " ${VERSION} " ]]; then

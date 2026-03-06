@@ -78,7 +78,10 @@ elif [[ "$ENVIRONMENT" == "prod" ]]; then
   dagster-celery-worker=$AE_REGISTRY/harvest:$AE_VERSION\n \
   dagster-daemon=$AE_REGISTRY/harvest:$AE_VERSION\n \
   dagster-ui=$AE_REGISTRY/harvest:$AE_VERSION\n \
-  superset=$OS_REGISTRY/superset:$ANDUIN_VERSION"
+  superset=$OS_REGISTRY/superset:$ANDUIN_VERSION \n \
+  webapp-gateway=$AE_REGISTRY/webapp:$AE_VERSION \n \
+  spa=$AE_REGISTRY/webapp:$AE_VERSION \n \
+  api=$AE_REGISTRY/webapp:$AE_VERSION"
 
   cork-kube edit -c \
     -e "\$.services.postgres.image=$AE_REGISTRY/ae-postgres:$AE_VERSION" \
@@ -89,6 +92,9 @@ elif [[ "$ENVIRONMENT" == "prod" ]]; then
     -e "\$.services['dagster/dagster-daemon'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
     -e "\$.services['dagster/dagster-ui'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
     -e "\$.services.superset.image=$OS_REGISTRY/superset:$ANDUIN_VERSION" \
+    -e "\$.services['webapp-gateway'].image=$AE_REGISTRY/webapp:$AE_VERSION" \
+    -e "\$.services.spa.image=$AE_REGISTRY/webapp:$AE_VERSION" \
+    -e "\$.services.api.image=$AE_REGISTRY/webapp:$AE_VERSION" \
     --replace \
     -- compose/prod/compose.yaml
 fi

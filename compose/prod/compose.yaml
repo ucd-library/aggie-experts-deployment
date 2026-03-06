@@ -128,7 +128,7 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - ${PG_DATA_DIR}:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
   superset:
     image: us-west1-docker.pkg.dev/digital-ucdavis-edu/pub/superset:0.1.0
     env_file:
@@ -173,8 +173,8 @@ services:
     volumes:
       - es-data:/usr/share/elasticsearch/data
     restart: unless-stopped
-  gateway:
-    image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
+  webapp-gateway:
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.0.0-rc.1
     env_file:
       - .env
     ports:
@@ -185,7 +185,7 @@ services:
     restart: unless-stopped
     command: npm run gateway
   spa:
-    image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.0.0-rc.1
     environment:
       - CLIENT_ENV=${CLIENT_ENV:-production}
       - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
@@ -195,7 +195,7 @@ services:
     restart: unless-stopped
     command: npm run spa
   api:
-    image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.0.0-rc.1
     env_file:
       - .env
     depends_on:
@@ -229,4 +229,6 @@ volumes:
   es-data:
     driver: local
   rabbitmq_data:
+    driver: local
+  postgres_data:
     driver: local
