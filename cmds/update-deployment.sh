@@ -8,7 +8,7 @@ AE_VERSION=$2
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $ROOT_DIR/..
 
-ALLOWED_ENVIRONMENTS=("dev" "sandbox" "prod")
+ALLOWED_ENVIRONMENTS=("dev" "prod")
 
 LIBRARY_DEV_K8S="dev-libk8s"
 
@@ -58,7 +58,6 @@ POSTGRES_VERSION=$(echo $JSON_DATA | jq -r ".builds[\"$ANDUIN_VERSION\"].postgre
 echo "Updating Aggie Experts to version: $AE_VERSION (CaskFS: $CASKFS_VERSION, Anduin: $ANDUIN_VERSION, Postgres: $POSTGRES_VERSION)"
 
 if [[ "$ENVIRONMENT" == "dev" ]]; then
-  # edit postgres statefulset "$OS_REGISTRY/anduin-pg:$ANDUIN_VERSION" database ${ENVIRONMENT}
   edit postgres statefulset "$AE_REGISTRY/ae-postgres:$AE_VERSION" database ${ENVIRONMENT}
   edit elastic-search statefulset "$AE_REGISTRY/elastic-search:$AE_VERSION" elasticsearch ${ENVIRONMENT}
 
@@ -68,6 +67,10 @@ if [[ "$ENVIRONMENT" == "dev" ]]; then
   edit dagster/dagster-daemon deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
   edit dagster/dagster-ui deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
   edit superset statefulset "$OS_REGISTRY/superset:$ANDUIN_VERSION" service ${ENVIRONMENT}
+
+  edit webapp/gateway deployment "$AE_REGISTRY/webapp:$AE_VERSION" service ${ENVIRONMENT}
+  edit webapp/spa deployment "$AE_REGISTRY/webapp:$AE_VERSION" service ${ENVIRONMENT}
+  edit webapp/api deployment "$AE_REGISTRY/webapp:$AE_VERSION" service ${ENVIRONMENT}
 elif [[ "$ENVIRONMENT" == "prod" ]]; then
 
   echo -e "\nUpdating prod deployment with images:\n \
@@ -101,3 +104,21 @@ elif [[ "$ENVIRONMENT" == "prod" ]]; then
     --replace \
     -- compose/prod/compose.yaml
 fi
+
+echo ""
+read -p "Would you like to commit the changes to git? (y/n): " COMMIT_CHANGES
+
+if [[ "$COMMIT_CHANGES" == "y" ]]; then
+  echo -e "\nCommitting changes to git"
+
+  git add --all
+  git commit -m "Updated $ENVIRONMENT to version $AE_VERSION (CaskFS: $CASKFS_VERSION, Anduin: $ANDUIN_VERSION, Postgres: $POSTGRES_VERSION)"
+  git pull
+  git push
+else
+  echo ""
+  echo "Changes not committed to git."
+fi
+
+echo ""
+echo "Done updating deployment $ENVIRONMENT to version $AE_VERSION"
