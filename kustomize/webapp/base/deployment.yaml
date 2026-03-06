@@ -26,3 +26,11 @@ spec:
               name: jwt-secret
           - secretRef:
               name: oidc-client-secret
+        volumeMounts:
+        - name: service-account
+          mountPath: /etc/aggie-experts/service-account.json
+          subPath: service-account.json
+      volumes:
+        - name: service-account
+          secret:
+            secretName: service-account
