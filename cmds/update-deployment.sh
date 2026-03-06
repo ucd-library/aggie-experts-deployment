@@ -57,13 +57,38 @@ POSTGRES_VERSION=$(echo $JSON_DATA | jq -r ".builds[\"$ANDUIN_VERSION\"].postgre
 
 echo "Updating Aggie Experts to version: $AE_VERSION (CaskFS: $CASKFS_VERSION, Anduin: $ANDUIN_VERSION, Postgres: $POSTGRES_VERSION)"
 
-# edit postgres statefulset "$OS_REGISTRY/anduin-pg:$ANDUIN_VERSION" database ${ENVIRONMENT}
-edit postgres statefulset "$AE_REGISTRY/ae-postgres:$AE_VERSION" database ${ENVIRONMENT}
-edit elastic-search statefulset "$AE_REGISTRY/elastic-search:$AE_VERSION" elasticsearch ${ENVIRONMENT}
+if [[ "$ENVIRONMENT" == "dev" ]]; then
+  # edit postgres statefulset "$OS_REGISTRY/anduin-pg:$ANDUIN_VERSION" database ${ENVIRONMENT}
+  edit postgres statefulset "$AE_REGISTRY/ae-postgres:$AE_VERSION" database ${ENVIRONMENT}
+  edit elastic-search statefulset "$AE_REGISTRY/elastic-search:$AE_VERSION" elasticsearch ${ENVIRONMENT}
 
-edit anduin-gateway deployment "$AE_REGISTRY/anduin-gateway:$AE_VERSION" service ${ENVIRONMENT}
-edit caskfs-ui deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
-edit dagster/dagster-code-server deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
-edit dagster/dagster-daemon deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
-edit dagster/dagster-ui deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
-edit superset statefulset "$OS_REGISTRY/superset:$ANDUIN_VERSION" service ${ENVIRONMENT}
+  edit anduin-gateway deployment "$AE_REGISTRY/anduin-gateway:$AE_VERSION" service ${ENVIRONMENT}
+  edit caskfs-ui deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
+  edit dagster/dagster-celery-worker deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
+  edit dagster/dagster-daemon deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
+  edit dagster/dagster-ui deployment "$AE_REGISTRY/harvest:$AE_VERSION" service ${ENVIRONMENT}
+  edit superset statefulset "$OS_REGISTRY/superset:$ANDUIN_VERSION" service ${ENVIRONMENT}
+elif [[ "$ENVIRONMENT" == "prod" ]]; then
+
+  echo -e "\nUpdating prod deployment with images:\n \
+  postgres=$AE_REGISTRY/ae-postgres:$AE_VERSION\n \
+  elasticsearch=$AE_REGISTRY/elastic-search:$AE_VERSION\n \
+  anduin-gateway=$AE_REGISTRY/anduin-gateway:$AE_VERSION\n \
+  caskfs-ui=$AE_REGISTRY/harvest:$AE_VERSION\n \
+  dagster-celery-worker=$AE_REGISTRY/harvest:$AE_VERSION\n \
+  dagster-daemon=$AE_REGISTRY/harvest:$AE_VERSION\n \
+  dagster-ui=$AE_REGISTRY/harvest:$AE_VERSION\n \
+  superset=$OS_REGISTRY/superset:$ANDUIN_VERSION"
+
+  cork-kube edit -c \
+    -e "\$.services.postgres.image=$AE_REGISTRY/ae-postgres:$AE_VERSION" \
+    -e "\$.services.elasticsearch.image=$AE_REGISTRY/elastic-search:$AE_VERSION" \
+    -e "\$.services['anduin-gateway'].image=$AE_REGISTRY/anduin-gateway:$AE_VERSION" \
+    -e "\$.services['caskfs-ui'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
+    -e "\$.services['dagster/dagster-celery-worker'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
+    -e "\$.services['dagster/dagster-daemon'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
+    -e "\$.services['dagster/dagster-ui'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
+    -e "\$.services.superset.image=$OS_REGISTRY/superset:$ANDUIN_VERSION" \
+    --replace \
+    -- compose/prod/compose.yaml
+fi
