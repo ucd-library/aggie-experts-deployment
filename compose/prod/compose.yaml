@@ -7,23 +7,23 @@ services:
     depends_on:
       - postgres
     environment:
-      - PORT=4000
-      - APP_NAME=Aggie Experts - Harvest
-      - POSTGRES_PASSWORD=postgres
-      - CASK_URL=http://caskfs-ui:3000
-      - DAGSTER_URL=http://dagster-ui:3000
-      - DEFAULT_DASHBOARD_LINK=/superset/superset/dashboard/1
+      PORT: "4000"
+      APP_NAME: Aggie Experts - Harvest
+      POSTGRES_PASSWORD: postgres
+      CASK_URL: http://caskfs-ui:3000
+      DAGSTER_URL: http://dagster-ui:3000
+      DEFAULT_DASHBOARD_LINK: /superset/superset/dashboard/1
     ports:
       - '4000:4000'
   dagster-ui:
-    image: ${IMAGE_AGGIE_EXPERTS_HARVEST}
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.1
     env_file:
       - .env
     environment:
-      - DAGSTER_POSTGRES_USER=postgres
-      - DAGSTER_POSTGRES_PASSWORD=postgres
-      - DAGSTER_POSTGRES_DB=dagster
-      - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
+      DAGSTER_POSTGRES_USER: postgres
+      DAGSTER_POSTGRES_PASSWORD: postgres
+      DAGSTER_POSTGRES_DB: dagster
+      DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.1
     volumes:
       - dagster_storage:/opt/dagster/dagster_home/storage
     depends_on:
@@ -39,16 +39,16 @@ services:
       - '-w'
       - /opt/dagster/dagster_home/workspace.yaml
   dagster-daemon:
-    image: ${IMAGE_AGGIE_EXPERTS_HARVEST}
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.1
     env_file:
       - .env
     environment:
-      - EXPERTS_CACHE_ROOT_DIR=/opt/cache
-      - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
-      - DAGSTER_POSTGRES_USER=postgres
-      - DAGSTER_POSTGRES_PASSWORD=postgres
-      - DAGSTER_POSTGRES_DB=dagster
-      - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
+      EXPERTS_CACHE_ROOT_DIR: /opt/cache
+      GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
+      DAGSTER_POSTGRES_USER: postgres
+      DAGSTER_POSTGRES_PASSWORD: postgres
+      DAGSTER_POSTGRES_DB: dagster
+      DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.1
     volumes:
       - ./service-account.json:/service-account.json:ro
       - dagster_storage:/opt/dagster/dagster_home/storage
@@ -61,17 +61,17 @@ services:
       - '-w'
       - /opt/dagster/dagster_home/workspace.yaml
   dagster-celery-worker:
-    image: ${IMAGE_AGGIE_EXPERTS_HARVEST}
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.1
     env_file:
       - .env
     environment:
-      - EXPERTS_CACHE_ROOT_DIR=/opt/cache
-      - DAGSTER_POSTGRES_USER=postgres
-      - DAGSTER_POSTGRES_PASSWORD=postgres
-      - DAGSTER_POSTGRES_DB=dagster
-      - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
-      - CASKFS_LOG_LEVEL=warn
-      - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
+      EXPERTS_CACHE_ROOT_DIR: /opt/cache
+      DAGSTER_POSTGRES_USER: postgres
+      DAGSTER_POSTGRES_PASSWORD: postgres
+      DAGSTER_POSTGRES_DB: dagster
+      DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.1
+      CASKFS_LOG_LEVEL: warn
+      GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
     volumes:
       - ./service-account.json:/service-account.json:ro
       - dagster_storage:/opt/dagster/dagster_home/storage
@@ -101,12 +101,12 @@ services:
     env_file:
       - .env
     environment:
-      - EXPERTS_CACHE_ROOT_DIR=/opt/cache
-      - CASKFS_PG_HOST=postgres
-      - CASKFS_ENABLE_POWERWASH=true
-      - CASKFS_ROOT_DIR=/opt/cache
-      - CASKFS_ACL_ENABLED=false
-      - CASKFS_WEBAPP_PATH_PREFIX=/cask
+      EXPERTS_CACHE_ROOT_DIR: /opt/cache
+      CASKFS_PG_HOST: postgres
+      CASKFS_ENABLE_POWERWASH: "true"
+      CASKFS_ROOT_DIR: /opt/cache
+      CASKFS_ACL_ENABLED: "false"
+      CASKFS_WEBAPP_PATH_PREFIX: /cask
     volumes:
       - data_cache:/opt/cache
     depends_on:
@@ -118,8 +118,8 @@ services:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/ae-postgres:5.0.0-rc.1
     shm_size: 1g
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     healthcheck:
       test:
         - CMD-SHELL
@@ -134,9 +134,9 @@ services:
     env_file:
       - .env
     environment:
-      - DASHBOARD_FILE=gs://anduin-dashboards/dashboard_prod.zip
-      - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
-      - SUPERSET_APP_ROOT=/superset
+      DASHBOARD_FILE: gs://anduin-dashboards/dashboard_prod.zip
+      GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
+      SUPERSET_APP_ROOT: /superset
     depends_on:
       - postgres
     volumes:
@@ -146,30 +146,15 @@ services:
   elasticsearch:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/elastic-search:5.0.0-rc.1
     environment:
-      - node.name=elasticsearch
-      - bootstrap.memory_lock=true
-      - ES_JAVA_OPTS=-Xms4g -Xmx4g
+      node.name: elasticsearch
+      bootstrap.memory_lock: "true"
+      ES_JAVA_OPTS: "-Xms4g -Xmx4g"
     ports:
       - '9200:9200'
     ulimits:
       memlock:
         soft: -1
         hard: -1
-    healthcheck:
-      test:
-        - CMD-SHELL
-        - >-
-          if curl -s -o /dev/null -w "%{http_code}"
-          http://localhost:9200/_ingest/pipeline/aggie-experts-pipeline | grep
-          -q "200"; then exit 0; else curl -X PUT -H "Content-Type:
-          application/json" -d '{"description":"Adds a modified-date
-          field","processors":[{"set":{"field":"modified-date","value":"{{_ingest.timestamp}}"}}]}'
-          http://localhost:9200/_ingest/pipeline/aggie-experts-pipeline || exit
-          1; fi
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
     volumes:
       - es-data:/usr/share/elasticsearch/data
     restart: unless-stopped
@@ -187,8 +172,8 @@ services:
   spa:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.0.0-rc.1
     environment:
-      - CLIENT_ENV=${CLIENT_ENV:-production}
-      - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
+      CLIENT_ENV: "${CLIENT_ENV:-production}"
+      EXPERTS_IS_PUBLIC: "${EXPERTS_IS_PUBLIC:-true}"
     depends_on:
       elasticsearch:
         condition: service_healthy
@@ -208,13 +193,13 @@ services:
     ports:
       - '5601:5601'
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - SERVER_BASEPATH=/kibana
-      - SERVER_REWRITEBASEPATH=true
-      - SERVER_PUBLICBASEURL=http://localhost:4000/kibana
-      - xpack.security.enabled=false
-      - telemetry.enabled=false
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      SERVER_BASEPATH: /kibana
+      SERVER_REWRITEBASEPATH: "true"
+      SERVER_PUBLICBASEURL: http://localhost:4000/kibana
+      xpack.security.enabled: "false"
+      telemetry.enabled: "false"
     depends_on:
       - elasticsearch
 volumes:

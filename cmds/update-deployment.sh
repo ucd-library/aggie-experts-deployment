@@ -88,9 +88,12 @@ elif [[ "$ENVIRONMENT" == "prod" ]]; then
     -e "\$.services.elasticsearch.image=$AE_REGISTRY/elastic-search:$AE_VERSION" \
     -e "\$.services['anduin-gateway'].image=$AE_REGISTRY/anduin-gateway:$AE_VERSION" \
     -e "\$.services['caskfs-ui'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
-    -e "\$.services['dagster/dagster-celery-worker'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
-    -e "\$.services['dagster/dagster-daemon'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
-    -e "\$.services['dagster/dagster-ui'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
+    -e "\$.services['dagster-celery-worker'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
+    -e "\$.services['dagster-daemon'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
+    -e "\$.services['dagster-ui'].image=$AE_REGISTRY/harvest:$AE_VERSION" \
+    -e "\$.services['dagster-ui'].environment.DAGSTER_CURRENT_IMAGE=$AE_REGISTRY/harvest:$AE_VERSION" \
+    -e "\$.services['dagster-daemon'].environment.DAGSTER_CURRENT_IMAGE=$AE_REGISTRY/harvest:$AE_VERSION" \
+    -e "\$.services['dagster-celery-worker'].environment.DAGSTER_CURRENT_IMAGE=$AE_REGISTRY/harvest:$AE_VERSION" \
     -e "\$.services.superset.image=$OS_REGISTRY/superset:$ANDUIN_VERSION" \
     -e "\$.services['webapp-gateway'].image=$AE_REGISTRY/webapp:$AE_VERSION" \
     -e "\$.services.spa.image=$AE_REGISTRY/webapp:$AE_VERSION" \
