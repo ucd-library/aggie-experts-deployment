@@ -35,7 +35,7 @@ if [[ "$SERVICE_GROUP" == "all" ]]; then
   docker compose -p $PROJECT_NAME up --scale dagster-celery-worker=$WORKER_COUNT -d
 
 # attempt to do a rolling restart of just the webapp
-else if [[ "$SERVICE_GROUP" == "webapp" ]]; then
+elif [[ "$SERVICE_GROUP" == "webapp" ]]; then
   echo "Performing rolling restart of webapp services: ${WEBAPP_SERVICES[@]}"
   docker compose -p $PROJECT_NAME up --no-deps -d ${WEBAPP_SERVICES[@]} 
 
