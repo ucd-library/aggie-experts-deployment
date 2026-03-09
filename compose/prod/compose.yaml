@@ -166,7 +166,7 @@ services:
       - '8080:3000'
     depends_on:
       elasticsearch:
-        condition: service_healthy
+        condition: service_started
     restart: unless-stopped
     command: npm run gateway
   spa:
@@ -176,7 +176,7 @@ services:
       EXPERTS_IS_PUBLIC: "${EXPERTS_IS_PUBLIC:-true}"
     depends_on:
       elasticsearch:
-        condition: service_healthy
+        condition: service_started
     restart: unless-stopped
     command: npm run spa
   api:
@@ -185,7 +185,7 @@ services:
       - .env
     depends_on:
       elasticsearch:
-        condition: service_healthy
+        condition: service_started
     restart: unless-stopped
     command: npm run api
   kibana:
