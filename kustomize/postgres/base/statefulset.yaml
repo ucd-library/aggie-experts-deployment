@@ -40,6 +40,13 @@ spec:
         volumeMounts:
         - name: data-volume
           mountPath: /var/lib/postgresql/data
+        - name: dshm
+          mountPath: /dev/shm
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
   volumeClaimTemplates:
   - metadata:
       name: data-volume

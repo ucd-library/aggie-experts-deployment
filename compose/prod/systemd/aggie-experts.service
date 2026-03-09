@@ -1,0 +1,13 @@
+[Unit]
+Description=Aggie Experts Production Environment
+After=network.target docker.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/aggie-experts/compose/prod/systemd
+ExecStart=/usr/local/bin/docker compose -f /opt/aggie-experts/compose/prod/compose.yaml -p aggie-experts --scale dagster-celery-worker=3 up
+ExecStop=/usr/local/bin/docker compose -f /opt/aggie-experts/compose/prod/compose.yaml -p aggie-experts down
+#Restart=always
+
+[Install]
+WantedBy=multi-user.target
