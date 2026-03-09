@@ -4,7 +4,7 @@ aggie-experts.service is a sample script that can be used to register systemd cm
 
 
 ```
-sudo systemctl enable /opt/aggie-experts/compose/prod/systemd/aggie-experts.service
+sudo systemctl enable /opt/aggie-experts-deployment/compose/prod/systemd/aggie-experts.service
 ```
 
 Then
