@@ -162,6 +162,8 @@ services:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.0.0-rc.1
     env_file:
       - .env
+    volumes:
+      - ./service-account.json:/service-account.json:ro
     ports:
       - '8080:3000'
     depends_on:
@@ -183,6 +185,8 @@ services:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.0.0-rc.1
     env_file:
       - .env
+    volumes:
+      - ./service-account.json:/service-account.json:ro
     depends_on:
       elasticsearch:
         condition: service_started
