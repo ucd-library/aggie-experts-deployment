@@ -171,7 +171,7 @@ services:
   spa:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.0.0-rc.1
     environment:
-      CLIENT_ENV: "${CLIENT_ENV:-production}"
+      CLIENT_ENV: "prod"
       EXPERTS_IS_PUBLIC: "${EXPERTS_IS_PUBLIC:-true}"
     depends_on:
       elasticsearch:
