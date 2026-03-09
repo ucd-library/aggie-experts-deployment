@@ -2,10 +2,10 @@
 
 set -e
 
-HOST=https://experts-anduin.library.ucdavis.edu
+HOST=experts-anduin.library.ucdavis.edu
 SERVICE_GROUP=$1
 ALLOWED_SERVICE_GROUPS=("webapp" "anduin" "all")
-USERNAME=$USERNAME
+USERNAME=$(id -un)
 
 if [[ -z "$SERVICE_GROUP" ]]; then
   echo "Usage: $0 <service-group>"
@@ -20,4 +20,4 @@ if [[ ! " ${ALLOWED_SERVICE_GROUPS[@]} " =~ " ${SERVICE_GROUP} " ]]; then
   exit 1
 fi
 
-ssh $USERNAME@aggie-experts "cd /opt/aggie-experts-deployment/compose/prod/update-cluster.sh $SERVICE_GROUP"
+ssh $USERNAME@$HOST "/opt/aggie-experts-deployment/compose/prod/update-cluster.sh $SERVICE_GROUP"
