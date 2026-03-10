@@ -250,7 +250,7 @@ services:
       - "8080:3000"
     depends_on:
       elasticsearch:
-        condition: service_healthy
+        condition: service_started
     restart: unless-stopped
     command: npm run gateway
     # command: bash -c 'tail -f /dev/null'
@@ -275,7 +275,7 @@ services:
       - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
     depends_on:
       elasticsearch:
-        condition: service_healthy
+        condition: service_started
     restart: unless-stopped
     command: npm run spa
     # command: bash -c 'tail -f /dev/null'
@@ -298,7 +298,7 @@ services:
       - ../../../aggie-experts/service-account.json:/service-account.json
     depends_on:
       elasticsearch:
-        condition: service_healthy
+        condition: service_started
     restart: unless-stopped
     command: npm run api
     # command: bash -c 'tail -f /dev/null'
