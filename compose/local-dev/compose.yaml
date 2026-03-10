@@ -16,10 +16,10 @@ services:
       - AE_URL=http://localhost:8080
       - DEFAULT_DASHBOARD_LINK=/superset/superset/dashboard/1
     volumes:
-      - ../../../../project-anduin/auth-gateway/controllers:/opt/webapp/controllers
-      - ../../../../project-anduin/auth-gateway/lib:/opt/webapp/lib
-      - ../../../../project-anduin/auth-gateway/client:/opt/webapp/client
-      - ../../../../project-anduin/auth-gateway/index.js:/opt/webapp/index.js
+      - ../../../../project-anduin/auth-gateway/controllers:/app/controllers
+      - ../../../../project-anduin/auth-gateway/lib:/app/lib
+      - ../../../../project-anduin/auth-gateway/client:/app/client
+      - ../../../../project-anduin/auth-gateway/index.js:/app/index.js
     ports:
       - "4000:4000"
 

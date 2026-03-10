@@ -43,4 +43,4 @@ elif [[ "$SERVICE_GROUP" == "webapp" ]]; then
 elif [[ "$SERVICE_GROUP" == "anduin" ]]; then
   echo "Performing rolling restart of anduin services: ${ANDUIN_SERVICES[@]}"
   docker compose -p $PROJECT_NAME up --no-deps -d ${ANDUIN_SERVICES[@]} 
-fi
+if
