@@ -184,6 +184,8 @@ services:
       - .env
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
+      CDL_PROPAGATE_CHANGES: true
+      CDL_PROPAGATE_CHANGES_INSTANCE: qa
     volumes:
       - ./service-account.json:/service-account.json:ro
     depends_on:
