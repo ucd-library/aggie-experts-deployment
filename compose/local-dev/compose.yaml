@@ -319,10 +319,6 @@ services:
       depends_on:
         - elasticsearch
 
-networks:
-  default:
-    name: aggie_experts_prod
-
 volumes:
   data_cache:
     driver: local
