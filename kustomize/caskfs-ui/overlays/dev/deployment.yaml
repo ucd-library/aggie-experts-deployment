@@ -7,6 +7,6 @@ spec:
     spec:
       containers:
         - name: service
-          image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.15
+          image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.16
       nodeSelector:
         intended-for: ae-dev-harvest
