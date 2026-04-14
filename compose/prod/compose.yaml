@@ -170,6 +170,8 @@ services:
     command: npm run gateway
   spa:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.0.0-rc.19
+    env_file:
+      - .env
     environment:
       CLIENT_ENV: prod
       EXPERTS_IS_PUBLIC: ${EXPERTS_IS_PUBLIC:-true}
