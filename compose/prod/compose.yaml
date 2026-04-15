@@ -1,7 +1,7 @@
 services:
   anduin-gateway:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/anduin-gateway:5.0.0-rc.19
-    restart: always
+    restart: unless-stopped
     env_file:
       - .env
     depends_on:
@@ -17,6 +17,7 @@ services:
       - '4000:4000'
   dagster-ui:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.19
+    restart: unless-stopped
     env_file:
       - .env
     environment:
@@ -42,6 +43,7 @@ services:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.19
     env_file:
       - .env
+    restart: unless-stopped
     environment:
       EXPERTS_CACHE_ROOT_DIR: /opt/cache
       GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
@@ -62,6 +64,7 @@ services:
       - /opt/dagster/dagster_home/workspace.yaml
   dagster-celery-worker:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.19
+    restart: unless-stopped
     env_file:
       - .env
     environment:
@@ -91,10 +94,12 @@ services:
       - /opt/dagster/dagster_home/celery_config.yaml
   rabbitmq:
     image: rabbitmq:3-management
+    restart: unless-stopped
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
   caskfs-ui:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.0.0-rc.19
+    restart: unless-stopped
     env_file:
       - .env
     environment:
@@ -113,6 +118,7 @@ services:
       - serve
   postgres:
     image: us-west1-docker.pkg.dev/aggie-experts/pub/ae-postgres:5.0.0-rc.19
+    restart: unless-stopped
     shm_size: 1g
     environment:
       POSTGRES_USER: postgres
@@ -128,6 +134,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
   superset:
     image: us-west1-docker.pkg.dev/digital-ucdavis-edu/pub/superset:0.1.2
+    restart: unless-stopped
     env_file:
       - .env
     environment:
@@ -197,6 +204,7 @@ services:
     command: npm run api
   kibana:
     image: docker.elastic.co/kibana/kibana:8.4.3
+    restart: unless-stopped
     environment:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
       ELASTICSEARCH_URL: http://elasticsearch:9200

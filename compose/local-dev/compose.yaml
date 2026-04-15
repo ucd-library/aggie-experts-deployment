@@ -169,6 +169,7 @@ services:
       - ../../../../caskfs/src/bin:/opt/caskfs/src/bin
       - ../../../../caskfs/src/lib:/opt/caskfs/src/lib
       - ../../../../caskfs/src/schema:/opt/caskfs/src/schema
+      - ../../../../caskfs/src/client:/opt/caskfs/src/client
       - ../../../../caskfs/src/index.js:/opt/caskfs/src/index.js
       - data_cache:/opt/cache
     depends_on:
