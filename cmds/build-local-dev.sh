@@ -2,7 +2,7 @@
 #! /bin/bash
 VERSION=$1
 if [[ -z "$VERSION" ]]; then
-  VERSION="anduin"
+  VERSION="dev"
 fi
 
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
