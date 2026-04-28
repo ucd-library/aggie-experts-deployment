@@ -48,7 +48,7 @@ docker compose -p aggie-experts pull
 sudo systemctl enable /opt/aggie-experts-deployment/compose/prod/systemd/aggie-experts.service
 ```
 
-### 7. Start the service
+### 6. Start the service
 
 ```bash
 sudo service aggie-experts start
@@ -56,7 +56,7 @@ sudo service aggie-experts start
 
 The systemd unit starts the stack with 3 Dagster Celery workers and restarts it automatically on server reboot.
 
-### 8. Initialize databases (first run only)
+### 7. Initialize databases (first run only)
 
 After all containers are healthy, initialize Elasticsearch indexes, the PostgreSQL schema, Dagster metadata, and the CaskFS cache:
 
