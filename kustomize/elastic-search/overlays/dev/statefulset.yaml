@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
         - name: elasticsearch
-          image: us-west1-docker.pkg.dev/aggie-experts/pub/elastic-search:5.0.1
+          image: us-west1-docker.pkg.dev/aggie-experts/pub/elastic-search:5.0.2
       nodeSelector:
         intended-for: ae-dev-frontend
   volumeClaimTemplates:

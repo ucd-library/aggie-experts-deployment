@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
         - name: service
-          image: us-west1-docker.pkg.dev/digital-ucdavis-edu/pub/superset:0.1.2
+          image: us-west1-docker.pkg.dev/digital-ucdavis-edu/pub/superset:null
       nodeSelector:
         intended-for: ae-dev-harvest
   volumeClaimTemplates:
