@@ -50,7 +50,7 @@ edit() {
 }
 
 JSON_DATA=$(curl -s $AE_BUILD_REGISTRY_URL)
-echo $JSON_DATA
+
 CASKFS_VERSION=$(echo $JSON_DATA | jq -r ".builds[\"$AE_VERSION\"].caskfs")
 ANDUIN_VERSION=$(echo $JSON_DATA | jq -r ".builds[\"$AE_VERSION\"][\"project-anduin\"]")
 JSON_DATA=$(curl -s $ANDUIN_BUILD_REGISTRY_URL)
