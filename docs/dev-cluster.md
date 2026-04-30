@@ -4,6 +4,73 @@ The dev environment runs on a microk8s cluster (`libk8s`) in the `aggie-experts-
 
 Accessible at: https://anduin-dev.experts.library.ucdavis.edu
 
+## Service Topology
+
+```mermaid
+graph TD
+    browser["Browser"]
+    keycloak["Keycloak OIDC\nauth.library.ucdavis.edu"]
+
+    subgraph k8s["aggie-experts-dev  ·  microk8s / libk8s"]
+        subgraph ingress["nginx Ingress"]
+            ing1["harvest-dev.experts.library.ucdavis.edu"]
+            ing2["anduin-dev.experts.library.ucdavis.edu"]
+        end
+
+        subgraph harvest_node["Harvest Nodes"]
+            anduin_gw["anduin-gateway\n:4000"]
+            dagster_ui["dagster-ui\n:3000"]
+            dagster_daemon["dagster-daemon"]
+            dagster_worker["dagster-celery-worker"]
+            caskfs_ui["caskfs-ui\n:3000"]
+            superset_svc["superset\n:8088"]
+            pg[("postgres\n:5432")]
+            mq_svc[("rabbitmq\n:5672")]
+            kibana_svc["kibana\n:5601"]
+        end
+
+        subgraph webapp_node["Webapp Nodes"]
+            webapp_gw["webapp-gateway\n:3000"]
+            spa_svc["webapp-spa\n:3000"]
+            api_svc["webapp-api\n:3000"]
+            es_svc[("elasticsearch\n:9200  ×2")]
+        end
+    end
+
+    browser --> ing1
+    browser --> ing2
+
+    ing1 --> anduin_gw
+    ing2 --> webapp_gw
+
+    anduin_gw -->|OIDC| keycloak
+    webapp_gw -->|OIDC| keycloak
+
+    anduin_gw -->|/dagster| dagster_ui
+    anduin_gw -->|/cask| caskfs_ui
+    anduin_gw -->|/superset| superset_svc
+    anduin_gw -->|/kibana| kibana_svc
+
+    webapp_gw --> spa_svc
+    webapp_gw -->|/api| api_svc
+
+    dagster_ui --> pg
+    dagster_daemon --> pg
+    dagster_daemon --> mq_svc
+    dagster_worker --> mq_svc
+    dagster_worker --> pg
+    dagster_worker -->|index| es_svc
+    dagster_worker -->|artifacts| caskfs_ui
+
+    caskfs_ui --> pg
+
+    superset_svc --> pg
+
+    api_svc --> es_svc
+
+    kibana_svc --> es_svc
+```
+
 ## Prerequisites
 
 - [cork-kube](prerequisites.md#cork-kube) installed
