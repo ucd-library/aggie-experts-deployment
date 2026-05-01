@@ -123,3 +123,4 @@ fi
 
 echo ""
 echo "Done updating deployment $ENVIRONMENT to version $AE_VERSION"
+
