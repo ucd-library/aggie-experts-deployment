@@ -59,6 +59,13 @@ services:
       - DAGSTER_POSTGRES_DB=dagster
       - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
       - DAGSTER_MAX_CONCURRENT_RUNS=10
+      - MIV_POSTGRES_LOAD_ENABLED=true
+      - MIV_POSTGRES_HOST=postgres-miv
+      - MIV_POSTGRES_PORT=5432
+      - MIV_POSTGRES_USER=postgres
+      - MIV_POSTGRES_PASSWORD=postgres
+      - MIV_POSTGRES_DB=miv
+      - MIV_PG_SCHEMA=miv
     volumes:
       # commons
       - ../../../aggie-experts/commons/lib:/opt/commons/lib
@@ -79,6 +86,7 @@ services:
       - data_cache:/opt/cache
     depends_on:
       - postgres
+      - postgres-miv
       # - dagster-code-server
     command: ["dagster-daemon", "run", "-w", "/opt/dagster/dagster_home/workspace.yaml"]
 
@@ -125,6 +133,13 @@ services:
       - CASKFS_LOG_LEVEL=warn
       - DAGSTER_CURRENT_IMAGE=${IMAGE_AGGIE_EXPERTS_HARVEST}
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
+      - MIV_POSTGRES_LOAD_ENABLED=true
+      - MIV_POSTGRES_HOST=postgres-miv
+      - MIV_POSTGRES_PORT=5432
+      - MIV_POSTGRES_USER=postgres
+      - MIV_POSTGRES_PASSWORD=postgres
+      - MIV_POSTGRES_DB=miv
+      - MIV_PG_SCHEMA=miv
     volumes:
       # commons
       - ../../../aggie-experts/commons/lib:/opt/commons/lib
@@ -150,6 +165,8 @@ services:
       rabbitmq:
         condition: service_started
       postgres:
+        condition: service_healthy
+      postgres-miv:
         condition: service_healthy
 
 
@@ -197,6 +214,20 @@ services:
       retries: 5
     volumes:
       - pg_data:/var/lib/postgresql/data
+
+  postgres-miv:
+    image: ${IMAGE_AGGIE_EXPERTS_AE_POSTGRES}
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=miv
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d miv"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - miv_pg_data:/var/lib/postgresql/data
 
   superset:
     image: ${IMAGE_PROJECT_ANDUIN_SUPERSET}
@@ -288,6 +319,12 @@ services:
       - .env
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
+      - MIV_POSTGRES_HOST=postgres-miv
+      - MIV_POSTGRES_PORT=5432
+      - MIV_POSTGRES_USER=postgres
+      - MIV_POSTGRES_PASSWORD=postgres
+      - MIV_POSTGRES_DB=miv
+      - MIV_PG_SCHEMA=miv
     volumes:
       # commons
       - ../../../aggie-experts/commons/lib:/opt/commons/lib
@@ -301,6 +338,8 @@ services:
     depends_on:
       elasticsearch:
         condition: service_started
+      postgres-miv:
+        condition: service_healthy
     restart: unless-stopped
     command: npm run api
     # command: bash -c 'tail -f /dev/null'
@@ -327,6 +366,8 @@ volumes:
   dagster_storage:
     driver: local
   pg_data:
+    driver: local
+  miv_pg_data:
     driver: local
   superset_home:
     driver: local
