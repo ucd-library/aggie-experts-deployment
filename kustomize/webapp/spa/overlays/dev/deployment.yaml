@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: webapp-spa
 spec:
+  replicas: 2
   template:
     spec:
       containers:
@@ -13,3 +14,12 @@ spec:
               value: prod
             - name: EXPERTS_IS_PUBLIC
               value: 'true'
+      nodeSelector:
+        intended-for: ae-dev-frontend
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: webapp-spa

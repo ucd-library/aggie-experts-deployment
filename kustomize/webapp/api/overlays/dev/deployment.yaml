@@ -3,8 +3,18 @@ kind: Deployment
 metadata:
   name: webapp-api
 spec:
+  replicas: 2
   template:
     spec:
       containers:
         - name: service
           image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.1.1
+      nodeSelector:
+        intended-for: ae-dev-frontend
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: webapp-api
