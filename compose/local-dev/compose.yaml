@@ -275,6 +275,7 @@ services:
     environment:
       - CLIENT_ENV=${CLIENT_ENV:-production}
       - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
+      - CLIENT_FAQ_USE_CASKFS=${CLIENT_FAQ_USE_CASKFS:-false}
     depends_on:
       elasticsearch:
         condition: service_started
@@ -288,6 +289,9 @@ services:
       - .env
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/service-account.json
+      - CASKFS_ROOT_DIR=/opt/cache
+      - CASKFS_ACL_ENABLED=false
+      - CASKFS_PG_HOST=postgres
     volumes:
       # commons
       - ../../../aggie-experts/commons/lib:/opt/commons/lib
@@ -295,9 +299,12 @@ services:
       # webapp code
       - ../../../aggie-experts/webapp/lib:/opt/webapp/lib
       - ../../../aggie-experts/webapp/models:/opt/webapp/models
+      # caskfs code
+      - ../../../../caskfs/src:/opt/caskfs/src
       # # harvest code
       - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
       - ../../../aggie-experts/service-account.json:/service-account.json
+      - data_cache:/opt/cache
     depends_on:
       elasticsearch:
         condition: service_started
