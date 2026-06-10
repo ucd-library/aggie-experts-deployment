@@ -11,10 +11,10 @@ spec:
           image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.1.1
       nodeSelector:
         intended-for: ae-dev-frontend
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector:
-            matchLabels:
-              app: webapp-api
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: webapp-api
+            topologyKey: kubernetes.io/hostname

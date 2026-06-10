@@ -5,11 +5,20 @@ metadata:
 spec:
   template:
     spec:
+      nodeSelector: null
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: intended-for
+                operator: In
+                values:
+                - ae-dev-frontend
+                - es-quorum
       containers:
         - name: elasticsearch
           image: us-west1-docker.pkg.dev/aggie-experts/pub/elastic-search:5.1.1
-      nodeSelector:
-        intended-for: ae-dev-frontend
   volumeClaimTemplates:
     - metadata:
         name: data

@@ -16,10 +16,10 @@ spec:
               value: 'true'
       nodeSelector:
         intended-for: ae-dev-frontend
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector:
-            matchLabels:
-              app: webapp-spa
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: webapp-spa
+            topologyKey: kubernetes.io/hostname

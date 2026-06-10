@@ -4,7 +4,7 @@ metadata:
   name: elasticsearch
 spec:
   serviceName: elasticsearch
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: elasticsearch
@@ -77,7 +77,7 @@ spec:
           - name: "discovery.seed_hosts"
             value: "elasticsearch"
           - name: "cluster.initial_master_nodes"
-            value: "elasticsearch-0,elasticsearch-1"
+            value: "elasticsearch-0,elasticsearch-1,elasticsearch-2"
           - name: cluster.name
             value: elasticsearch
           - name: network.host
