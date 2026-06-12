@@ -14,10 +14,7 @@
   },
 
   "secrets" : {
-    "dev" : [{
-      "k8sName" : "kubeconfig",
-      "kubeconfig" : true
-    },
+    "dev" : [
     {
       "k8sName" : "postgres-password",
       "mappings" : [{
