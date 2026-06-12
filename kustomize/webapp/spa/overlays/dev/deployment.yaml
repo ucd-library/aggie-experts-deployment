@@ -19,7 +19,7 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: webapp-spa
-            topologyKey: kubernetes.io/hostname
+            - labelSelector:
+                matchLabels:
+                  app: webapp-spa
+              topologyKey: kubernetes.io/hostname
