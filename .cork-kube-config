@@ -7,8 +7,8 @@
       "platform" : "microk8s",
       "namespace" : "aggie-experts-dev",
       "kubeconfig" : {
-        "secret" : "kubeconfig-dev-libk8s",
-        "context" : "microk8s"
+        "secret" : "libk8s-ae-dev-deployer",
+        "context" : "aggie-experts-dev-deploy-context"
       }
     }
   },
