@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
         - name: service
-          image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.2.2
+          image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.2.3
           env:
             - name: CLIENT_ENV
               value: prod
