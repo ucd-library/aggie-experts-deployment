@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
         - name: service
-          image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.2.8
+          image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.2.9
       nodeSelector:
         intended-for: ae-dev-frontend
       affinity:
