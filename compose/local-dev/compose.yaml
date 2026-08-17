@@ -139,6 +139,8 @@ services:
       - ../../../../caskfs/src:/opt/caskfs/src
       # search templates
       - ../../../aggie-experts/webapp/models/search/template:/opt/webapp/models/search/template
+      # static web assets (synced into CaskFS by `experts admin sync-web-assets`)
+      - ../../../aggie-experts/webapp/spa/client/static-assets:/opt/webapp/spa/client/static-assets
       # ae harvest code
       - ../../../aggie-experts/harvest/lib:/opt/harvest/lib
       - ../../../aggie-experts/harvest/bin:/opt/harvest/bin
@@ -259,6 +261,8 @@ services:
 
   spa:
     image: ${IMAGE_AGGIE_EXPERTS_WEBAPP}
+    env_file:
+      - .env
     volumes:
       # commons
       - ../../../aggie-experts/commons/lib:/opt/commons/lib
@@ -275,8 +279,11 @@ services:
     environment:
       - CLIENT_ENV=${CLIENT_ENV:-production}
       - EXPERTS_IS_PUBLIC=${EXPERTS_IS_PUBLIC:-true}
+      - CASK_URL=http://caskfs-ui:3000
     depends_on:
       elasticsearch:
+        condition: service_started
+      caskfs-ui:
         condition: service_started
     restart: unless-stopped
     command: npm run spa
