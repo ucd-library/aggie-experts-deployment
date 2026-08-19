@@ -189,6 +189,7 @@ services:
 
   postgres:
     image: ${IMAGE_AGGIE_EXPERTS_AE_POSTGRES}
+    shm_size: 256mb
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
