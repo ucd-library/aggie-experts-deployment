@@ -14,6 +14,15 @@ spec:
       containers:
       - name: service
         command: ["npm", "run", "api"]
+        envFrom:
+          - configMapRef:
+              name: app-config
+          - secretRef:
+              name: jwt-secret
+          - secretRef:
+              name: oidc-client-secret
+          - secretRef:
+              name: slack-webhook-url
         readinessProbe:
           httpGet:
             path: /
