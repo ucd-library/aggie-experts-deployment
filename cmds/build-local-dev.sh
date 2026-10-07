@@ -23,7 +23,7 @@ cork-kube build exec \
   -o sandbox \
   --depth ALL
 
-cork-kube build exec \
+cork-kube build exec cork
   -p aggie-experts \
   -v $VERSION \
   --set-env $ENV_FILE \
