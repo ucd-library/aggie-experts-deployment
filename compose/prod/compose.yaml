@@ -26,6 +26,7 @@ services:
       DAGSTER_POSTGRES_DB: dagster
       DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.4
       DAGSTER_MAX_CONCURRENT_RUNS: 15
+      CASKFS_FILTER_URI_MATCHES: ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
     volumes:
       - dagster_storage:/opt/dagster/dagster_home/storage
     depends_on:
@@ -53,6 +54,7 @@ services:
       DAGSTER_POSTGRES_DB: dagster
       DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.4
       DAGSTER_MAX_CONCURRENT_RUNS: 15
+      CASKFS_FILTER_URI_MATCHES: ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
     volumes:
       - ./service-account.json:/service-account.json:ro
       - dagster_storage:/opt/dagster/dagster_home/storage
@@ -77,6 +79,7 @@ services:
       DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.4
       CASKFS_LOG_LEVEL: warn
       GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
+      CASKFS_FILTER_URI_MATCHES: ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
     volumes:
       - ./service-account.json:/service-account.json:ro
       - dagster_storage:/opt/dagster/dagster_home/storage
@@ -111,6 +114,7 @@ services:
       CASKFS_ROOT_DIR: /opt/cache
       CASKFS_ACL_ENABLED: 'false'
       CASKFS_WEBAPP_PATH_PREFIX: /cask
+      CASKFS_FILTER_URI_MATCHES: ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
     volumes:
       - data_cache:/opt/cache
     depends_on:
