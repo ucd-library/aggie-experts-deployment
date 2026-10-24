@@ -1,6 +1,6 @@
 services:
   anduin-gateway:
-    image: us-west1-docker.pkg.dev/aggie-experts/pub/anduin-gateway:5.4.4
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/anduin-gateway:5.4.5
     restart: unless-stopped
     env_file:
       - .env
@@ -16,7 +16,7 @@ services:
     ports:
       - '4000:4000'
   dagster-ui:
-    image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.4
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.5
     restart: unless-stopped
     env_file:
       - .env
@@ -24,9 +24,10 @@ services:
       DAGSTER_POSTGRES_USER: postgres
       DAGSTER_POSTGRES_PASSWORD: postgres
       DAGSTER_POSTGRES_DB: dagster
-      DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.4
+      DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.5
       DAGSTER_MAX_CONCURRENT_RUNS: 15
-      CASKFS_FILTER_URI_MATCHES: ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
+      CASKFS_FILTER_URI_MATCHES: >-
+        ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
     volumes:
       - dagster_storage:/opt/dagster/dagster_home/storage
     depends_on:
@@ -42,7 +43,7 @@ services:
       - '-w'
       - /opt/dagster/dagster_home/workspace.yaml
   dagster-daemon:
-    image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.4
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.5
     env_file:
       - .env
     restart: unless-stopped
@@ -52,9 +53,10 @@ services:
       DAGSTER_POSTGRES_USER: postgres
       DAGSTER_POSTGRES_PASSWORD: postgres
       DAGSTER_POSTGRES_DB: dagster
-      DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.4
+      DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.5
       DAGSTER_MAX_CONCURRENT_RUNS: 15
-      CASKFS_FILTER_URI_MATCHES: ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
+      CASKFS_FILTER_URI_MATCHES: >-
+        ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
     volumes:
       - ./service-account.json:/service-account.json:ro
       - dagster_storage:/opt/dagster/dagster_home/storage
@@ -67,7 +69,7 @@ services:
       - '-w'
       - /opt/dagster/dagster_home/workspace.yaml
   dagster-celery-worker:
-    image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.4
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.5
     restart: unless-stopped
     env_file:
       - .env
@@ -76,10 +78,11 @@ services:
       DAGSTER_POSTGRES_USER: postgres
       DAGSTER_POSTGRES_PASSWORD: postgres
       DAGSTER_POSTGRES_DB: dagster
-      DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.4
+      DAGSTER_CURRENT_IMAGE: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.5
       CASKFS_LOG_LEVEL: warn
       GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
-      CASKFS_FILTER_URI_MATCHES: ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
+      CASKFS_FILTER_URI_MATCHES: >-
+        ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
     volumes:
       - ./service-account.json:/service-account.json:ro
       - dagster_storage:/opt/dagster/dagster_home/storage
@@ -103,7 +106,7 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
   caskfs-ui:
-    image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.4
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/harvest:5.4.5
     restart: unless-stopped
     env_file:
       - .env
@@ -114,7 +117,8 @@ services:
       CASKFS_ROOT_DIR: /opt/cache
       CASKFS_ACL_ENABLED: 'false'
       CASKFS_WEBAPP_PATH_PREFIX: /cask
-      CASKFS_FILTER_URI_MATCHES: ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
+      CASKFS_FILTER_URI_MATCHES: >-
+        ^ark:/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)?(?![A-Za-z0-9._/#-])
     volumes:
       - data_cache:/opt/cache
     depends_on:
@@ -123,7 +127,7 @@ services:
       - cask
       - serve
   postgres:
-    image: us-west1-docker.pkg.dev/aggie-experts/pub/ae-postgres:5.4.4
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/ae-postgres:5.4.5
     restart: unless-stopped
     shm_size: 1g
     environment:
@@ -154,7 +158,7 @@ services:
       - superset_home:/app/superset_home
       - superset_init:/etc/superset/init
   elasticsearch:
-    image: us-west1-docker.pkg.dev/aggie-experts/pub/elastic-search:5.4.4
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/elastic-search:5.4.5
     environment:
       node.name: elasticsearch
       bootstrap.memory_lock: 'true'
@@ -167,7 +171,7 @@ services:
       - es-data:/usr/share/elasticsearch/data
     restart: unless-stopped
   webapp-gateway:
-    image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.4.4
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.4.5
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
     env_file:
@@ -182,7 +186,7 @@ services:
     restart: unless-stopped
     command: npm run gateway
   spa:
-    image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.4.4
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.4.5
     env_file:
       - .env
     environment:
@@ -194,7 +198,7 @@ services:
     restart: unless-stopped
     command: npm run spa
   api:
-    image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.4.4
+    image: us-west1-docker.pkg.dev/aggie-experts/pub/webapp:5.4.5
     env_file:
       - .env
     environment:
